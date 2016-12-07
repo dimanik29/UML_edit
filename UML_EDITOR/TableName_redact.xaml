@@ -1,0 +1,20 @@
+﻿<Window x:Class="Lab5.TableName_redact"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab5"
+        mc:Ignorable="d"
+        Title="Редактирование имени" Height="155" Width="230">
+    <Grid>
+        <StackPanel Orientation="Vertical">
+            <Label x:Name="label" Content="Введите имя диаграммы" HorizontalAlignment="Center" Margin="10"/>
+            <TextBox x:Name="textBox" Height="23" Width="120" TextWrapping="Wrap" Text="Диаграмма n"
+                      HorizontalAlignment="Center" FontSize="14" SpellCheck.IsEnabled="True"/>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                <Button Content="OК" Height="25" Width="70" Margin="0,15,12,0" Click="ButtonOk_Click" x:Name="OK"/>
+                <Button Content="Отмена" Height="25" Width="70" Margin="12,15,0,0" Click="ButtonCancel_Click" x:Name="Cancel"/>
+            </StackPanel>
+        </StackPanel>
+    </Grid>
+</Window>
