@@ -17,10 +17,11 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        
+
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
             <Button Content=" New " Height="40" Width="80" Click="Button_New"/>
             <Button Content=" Load " Height="40" Width="80" Click="Button_Load"/>
+            <Thumb Width="20"/>
             <Button Content=" Save " Height="40" Width="80" Click="Button_Save"/>
             <Button Content=" New_tab " Height="40" Width="80" Click="Button_newTab"/>
             <Grid Height="40" Width="80" x:Name="Grid_create" Visibility="Collapsed">
@@ -46,6 +47,13 @@
                 <RadioButton Margin="2" x:Name="Line_Equal" Content="Equal" IsChecked="True"  VerticalAlignment="Center" Checked="Line_Equal_Checked"/>
                 <RadioButton Margin="2" x:Name="Line_Anchor" Content="Anchor" VerticalAlignment="Center" Checked="Line_Anchor_Checked"/>
             </StackPanel>
+            <TextBlock Height="40" Width="80" x:Name="Width_n" TextAlignment="Center"/>
+            <TextBlock Height="40" Width="80" x:Name="Height_n" TextAlignment="Center"/>
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Selecting" Margin="2"/>
+                <RadioButton Margin="2" x:Name="Size_off" Content="off" IsChecked="True" VerticalAlignment="Center"/>
+                <RadioButton Margin="2" x:Name="Size_on" Content="on" VerticalAlignment="Center"/>
+            </StackPanel>
         </StackPanel>
         
         <TabControl Grid.Row="1"  Name="tabControl1">
@@ -61,6 +69,20 @@
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <Grid>
+
+                        <!--<Rectangle x:Name="Size_Changer" Stroke="DarkViolet" StrokeThickness="1" StrokeDashArray="7 12" Fill="Wheat" Width="300" Height="200" Visibility="Visible"
+                                   HorizontalAlignment="Left" VerticalAlignment="Top" MouseDown="Size_Changer_MouseDown">
+                            <Rectangle.RenderTransform>
+                                <TranslateTransform x:Name="tt_Size_Changer"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle> предположительная область масштабирования-->
+
+                        <Rectangle x:Name="tap" Stroke="Black" StrokeThickness="2" Fill="Black" Width="8" Height="8">
+                            <Rectangle.RenderTransform>
+                                <TranslateTransform x:Name="tt_tap"/>
+                            </Rectangle.RenderTransform>
+                        </Rectangle>
+
                         <ItemsControl ItemsSource="{Binding Nodes}" ItemsPanel="{StaticResource cnv}"
                                       MouseDown="ItemsControl_MouseDown" 
                                       MouseMove="ItemsControl_MouseMove"
@@ -88,7 +110,7 @@
                                         <Grid>
                                             <TextBox x:Name="tbx" BorderBrush="Transparent" Background="Transparent" Focusable="True"
                            Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10" Visibility="{Binding EditModeVisibility}"/>
-                                            <TextBlock Text="{Binding Text}" FontSize="16" Margin="10" Visibility="{Binding ViewModeVisibility}"/>
+                                            <TextBlock Text="{Binding Text}" FontSize="16" Margin="10" Visibility="{Binding ViewModeVisibility}" MouseDown="TextBlock_MouseDown"/>
                                         </Grid>
                                     </Border>
                                 </DataTemplate>

@@ -76,11 +76,15 @@ namespace Lab5
         double mousePath;
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var border = sender as Border;
-                var ic = sender as ItemsControl;
-                var selectRegion = border.FindName("selectRegion") as Rectangle;
+                Width_n.Text = ("Width" + "\n" + border.ActualWidth);
+                Height_n.Text = ("Height" + "\n" + border.ActualHeight);
+                var ic = (sender as ItemsControl);
+                var grid = (ic.Parent as Grid);
+                var selectRegion = grid.FindName("selectRegion") as Rectangle;
 
                 if (e.ClickCount == 2)
                 {
@@ -124,7 +128,7 @@ namespace Lab5
                     }
                     else
                     {
-                        //selectRegion.Visibility = System.Windows.Visibility.Collapsed;
+                        selectRegion.Visibility = System.Windows.Visibility.Collapsed;
                         curNode = border.DataContext as Node;
                     }
                 }
@@ -194,12 +198,12 @@ namespace Lab5
 
                 var rem = graph.Nodes.Where(x => x.Selected).ToArray();
                 graph.Nodes.Remove(curNode);
-                for (int i = 0; i < rem.Length; i++)
+                for (int i = 0; i < rem.Length; i++) //удаление нескольких узлов
                 {
                     graph.Nodes.Remove(rem[i]);
                 }
                 var edge_count = graph.Edges.ToArray();
-                for (int i = 0; i < rem.Length; i++)
+                for (int i = 0; i < rem.Length; i++) //удаление нескольких рёбер
                 {
                     var tmp = graph.Edges.Where(x => x.A == rem[i] || x.B == rem[i]).ToArray();
                     foreach (var item in tmp)
@@ -235,6 +239,8 @@ namespace Lab5
             Grid_create.Visibility = Visibility.Visible;
             EditButton.Visibility = Visibility.Collapsed;
             CreateButton.Visibility = Visibility.Visible;
+            textBox_nameDiag.SelectAll();
+            textBox_nameDiag.Focus();
            // graphs.Add(new Graph{ Hedee = "322"});
         }
 
@@ -489,8 +495,45 @@ namespace Lab5
                     Grid_create.Visibility = Visibility.Visible;
                     EditButton.Visibility = Visibility.Visible;
                     CreateButton.Visibility = Visibility.Collapsed;
+                    textBox_nameDiag.SelectAll();
+                    textBox_nameDiag.Focus();
                 }
             }
+        }
+        
+        private void Size_Changer_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            bool r = false;
+            //Size_Changer.Fill = new SolidColorBrush(Colors.DarkTurquoise);
+            var sel = sender as Rectangle;
+            var grid = (sel.Parent as Grid);
+            var Size_Changer = grid.FindName("Size_Changer") as Rectangle;
+            var tt_Size_Changer = Size_Changer.RenderTransform as TranslateTransform;
+            //var ghost_line = grid.FindName("ghost_line") as Line;
+            var g = e.GetPosition(grid);
+            var pr = g - selectRegionMousePress;
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                
+                if (e.ClickCount == 2)
+                {
+                    r = !r;
+                }
+                if (r== true)
+                {
+                    Size_Changer.Fill = new SolidColorBrush(Colors.DarkTurquoise);
+                }
+                else
+                {
+                    Size_Changer.Fill = new SolidColorBrush(Colors.Wheat);
+                }
+            }
+            e.Handled = false;
+        }
+
+        private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
         }
     }
 }
