@@ -84,37 +84,117 @@
                         </Rectangle>
 
                         <ItemsControl ItemsSource="{Binding Nodes}" ItemsPanel="{StaticResource cnv}"
-                                      MouseDown="ItemsControl_MouseDown" 
+                                      MouseDown="ItemsControl_MouseDown"
                                       MouseMove="ItemsControl_MouseMove"
                                       MouseUp="ItemsControl_MouseUp"
-                                      Background="#01FFFFFF">
+                                      Background="#01FFFFFF" >
+                            <!--Mouse.MouseLeave="ItemsControl_MouseLeave"-->
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border BorderBrush="Blue" BorderThickness="2" Background="#EEF" 
+                                    <Canvas>
+                                        <Canvas.ContextMenu>
+                                            <ContextMenu>
+                                                <MenuItem Header="Item" Click="MenuItem_Click">
+                                                    <MenuItem Header="item2"/>
+                                                    <Separator/>
+                                                </MenuItem>
+                                            </ContextMenu>
+                                        </Canvas.ContextMenu>
+                                        <Rectangle Fill="#0fff" Stroke="Purple" StrokeThickness="2" StrokeDashArray="1 2" Height="{Binding Height}" Width="{Binding Width}">
+                                            <Rectangle.RenderTransform>
+                                                <TransformGroup>
+                                                    <TranslateTransform X="{Binding Pos.X}" Y="{Binding Pos.Y}"/>
+                                                </TransformGroup>
+                                            </Rectangle.RenderTransform>
+                                        </Rectangle>
+                                        <Border BorderBrush="Blue" BorderThickness="2" Background="#EEF" 
                                         CornerRadius="{Binding Corner}" Loaded="Border_Loaded"
                                         MouseDown="Border_MouseDown"
-                                        MouseMove="Border_MouseMove"
-                                        MouseUp="Border_MouseUp" x:Name="border_node" >
-
+                                        MouseMove="Border_MouseMove" Height="{Binding Height}" Width="{Binding Width}"
+                                        MouseUp="Border_MouseUp" x:Name="border_node" MouseEnter="border_node_MouseEnter" Visibility="Visible">
                                         <Border.RenderTransform>
                                             <TransformGroup>
                                                 <!--<TranslateTransform x:Name="bord_transform"/>-->
-                                                <TranslateTransform X="-40" Y="-20"/>
+                                                <!--<TranslateTransform X="-40" Y="-20"/>-->
                                                 <TranslateTransform X="{Binding Pos.X}" Y="{Binding Pos.Y}"/>
                                             </TransformGroup>
-
                                         </Border.RenderTransform>
                                         <Border.BitmapEffect>
                                             <DropShadowBitmapEffect Opacity="{Binding ShadowOpacity}"/>
                                         </Border.BitmapEffect>
-                                        <Grid>
-                                            <TextBox x:Name="tbx" BorderBrush="Transparent" Background="Transparent" Focusable="True"
+                                        <Viewbox>
+                                                <Grid>
+                                                    <StackPanel>
+                                                        <Grid>
+                                                            <TextBox x:Name="tbx" TextWrapping="Wrap" BorderBrush="Transparent" Background="Transparent" Focusable="True"
                            Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10" Visibility="{Binding EditModeVisibility}"/>
-                                            <TextBlock Text="{Binding Text}" FontSize="16" Margin="10" Visibility="{Binding ViewModeVisibility}" MouseDown="TextBlock_MouseDown"/>
-                                        </Grid>
+                                                            <TextBlock Text="{Binding Text}" FontSize="16" Margin="10" Visibility="{Binding ViewModeVisibility}" MouseDown="TextBlock_MouseDown"/>
+                                                        </Grid>
+                                                        <ItemsControl ItemsSource="{Binding Metods}"/>
+                                                    </StackPanel>
+                                                </Grid>
+                                            </Viewbox>
                                     </Border>
+                                        <Canvas Visibility="{Binding SizeMode}">
+                                            <Border BorderBrush="Blue" BorderThickness="2">
+                                                <Rectangle Fill="Wheat" Height="10" Width="10"
+                                                   MouseMove="Rectangle_MouseMove_bot"
+                                                   MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+                                                <Border.RenderTransform>
+                                                    <TransformGroup>
+                                                        <TranslateTransform X="{Binding Bot.X}" Y="{Binding Bot.Y}"/>
+                                                    </TransformGroup>
+                                                </Border.RenderTransform>
+                                            </Border>
+                                            <Border BorderBrush="Blue" BorderThickness="2">
+                                                <Rectangle Fill="Gray" Height="10" Width="10"
+                                                   MouseMove="Rectangle_MouseMove_right"
+                                                   MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+                                                <Border.RenderTransform>
+                                                    <TransformGroup>
+                                                        <TranslateTransform X="{Binding Right.X}" Y="{Binding Right.Y}"/>
+                                                    </TransformGroup>
+                                                </Border.RenderTransform>
+                                            </Border>
+                                            <Border BorderBrush="Blue" BorderThickness="2">
+                                                <Rectangle Fill="White" Height="10" Width="10"
+                                                   MouseMove="Rectangle_MouseMove_right_bot"
+                                                   MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+                                                <Border.RenderTransform>
+                                                    <TransformGroup>
+                                                        <TranslateTransform X="{Binding Right_Bot.X}" Y="{Binding Right_Bot.Y}"/>
+                                                    </TransformGroup>
+                                                </Border.RenderTransform>
+                                            </Border>
+                                        </Canvas>
+                                    </Canvas>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
+                            
+                            <!--<DataTemplate>
+                                <Canvas Visibility="{Binding SizeMode}">
+                                    <Border BorderBrush="Blue" BorderThickness="2">
+                                        <Rectangle Fill="Green" Height="10" Width="10"
+                               MouseMove="Rectangle_MouseMove_bot"
+                               MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+                                        <Border.RenderTransform>
+                                            <TransformGroup>
+                                                <TranslateTransform X="{Binding Bot.X}" Y="{Binding Bot.Y}"/>
+                                            </TransformGroup>
+                                        </Border.RenderTransform>
+                                    </Border>
+                                    <Border BorderBrush="Blue" BorderThickness="2">
+                                        <Rectangle Fill="Red" Height="10" Width="10"
+                               MouseMove="Rectangle_MouseMove_right"
+                               MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
+                                        <Border.RenderTransform>
+                                            <TransformGroup>
+                                                <TranslateTransform X="{Binding Right.X}" Y="{Binding Right.Y}"/>
+                                            </TransformGroup>
+                                        </Border.RenderTransform>
+                                    </Border>
+                                </Canvas>
+                            </DataTemplate>-->
                         </ItemsControl>
                         
                         <Rectangle x:Name="selectRegion" Stroke="#B07F" StrokeThickness="2" Fill="#207F" Width="200" Height="200" Visibility="Collapsed"
@@ -127,7 +207,7 @@
                         <ItemsControl ItemsSource="{Binding Edges}" ItemsPanel="{StaticResource cnv}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Line X1="{Binding A.Pos.X}" Y1="{Binding A.Pos.Y}" X2="{Binding B.Pos.X}" Y2="{Binding B.Pos.Y}" 
+                                    <Line X1="{Binding A.Center.X}" Y1="{Binding A.Center.Y}" X2="{Binding B.Center.X}" Y2="{Binding B.Center.Y}" 
                       Stroke="Green" StrokeThickness="10" MouseDown="Line_MouseDown" Loaded="Line_Loaded" StrokeDashArray="{Binding Dash}">
                                         <Line.BitmapEffect>
                                             <DropShadowBitmapEffect Opacity="{Binding ShadowOpacity}"/>

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -10,10 +11,10 @@ using System.Windows.Controls;
 
 namespace Lab5
 {
-    class ViewModelBase : INotifyPropertyChanged
+    public class ViewModelBase : INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        protected void Set<T>(ref T field, T value, params string[] propNames) where T : IEquatable<T>
+        protected void Set<T>(ref T field, T value, params string[] propNames)
         {
             if (field != null && !field.Equals(value) || value != null && !value.Equals(field))
             {
@@ -28,6 +29,26 @@ namespace Lab5
             }
         }
 
+        protected void Set<T>(ref T field, T value, [CallerMemberName] string propName = null)
+        {
+            if (field != null && !field.Equals(value) || value != null && !value.Equals(field))
+            {
+                field = value;
+                if (PropertyChanged != null)
+                {
+                    PropertyChanged(this, new PropertyChangedEventArgs(propName));
+                }
+            }
+        }
+
+        protected void Fire([CallerMemberName] string propName = null)
+        {
+            if (PropertyChanged != null)
+            {
+                PropertyChanged(this, new PropertyChangedEventArgs(propName));
+            }
+        }
+
         protected void Fire(params string[] names)
         {
             if (PropertyChanged != null)
@@ -39,7 +60,7 @@ namespace Lab5
     }
 
 
-    class Graph
+    class Graph : ViewModelBase
     {
         //public string HeaderName { get { return "UML 1"; } }
         //string _Text;
@@ -48,10 +69,11 @@ namespace Lab5
         //    get { return _Text; }
         //    set { Set(ref _Text, value, "Text"); }
         //}
-        public string Hedee;
+        string hedee;
         public string HeaderName
         {
-            get { return Hedee; }
+            get { return hedee; }
+            set { Set(ref hedee, value); }
         }
         public ObservableCollection<Node> nodes = new ObservableCollection<Node>();
         public ObservableCollection<Edge> edges = new ObservableCollection<Edge>();
@@ -108,8 +130,19 @@ namespace Lab5
         }
     }
 
-    class Node : ViewModelBase
+    class Node : ViewModelBase,INotifyPropertyChanged
     {
+        public Node()
+        {
+            SizeMode = Visibility.Hidden;
+            Metods = new List<string>();
+        }
+        public void AddMethod(string f)
+        {
+            Metods.Add(f);
+            Fire(nameof(Metods));
+        }
+        //public event PropertyChangedEventHandler PropertyChanged;
         string _Text;
         public string Text  // полезные данные, характеризующие узел
         {
@@ -117,7 +150,55 @@ namespace Lab5
             set { Set(ref _Text, value, "Text"); }
         }
         public int Corner { get; set; }
+
         public Point Pos { get; set; }   //  узла на Canvas, нужна только для View
+        public Point Bot { get { return new Point(Pos.X + (int)Width / 2, Height + Pos.Y); } }
+        public Point Center { get { return new Point(Pos.X + (int)Width / 2, Pos.Y + (int)Height/2  ); } }
+        public Point Right { get { return new Point(Pos.X + Width, (int)Height / 2 + Pos.Y); } }
+        public Point Right_Bot { get { return new Point(Pos.X + Width, Height + Pos.Y); } }
+
+        public Visibility SizeMode { get; set; }
+
+        public List<string> Metods;
+
+        public double Width { get; set; }
+        public double Height { get; set; }
+
+        public void ResizeModOn()
+        {
+            SizeMode = Visibility.Visible;
+            Fire("SizeMode");
+            //Pch?.Invoke(this, new PropertyChangedEventArgs(nameof(SizeMode)));
+        }
+        public void ResizeModOff()
+        {
+            SizeMode = Visibility.Hidden;
+            Fire("SizeMode");
+            //Pch?.Invoke(this, new PropertyChangedEventArgs(nameof(SizeMode)));
+        }
+        public void Resize(double w, double h)
+        {
+            if (w > 50)
+            Width = w;
+            if(h>50)
+            Height = h;
+            Fire("Width");
+            Fire("Height");
+            FireAnchors();
+        }
+
+        public void FireAnchors()
+        {
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Left)));
+            Fire("Right");
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Right)));
+            Fire("Bot");
+            Fire(nameof(Right_Bot));
+            Fire(nameof(Center));
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Bot)));
+            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Top)));
+        }
+
         bool selected;
         public bool Selected { get { return selected; } }
         public int ShadowOpacity { get { return selected ? 1 : 0; } }
@@ -141,6 +222,7 @@ namespace Lab5
         {
             Pos += vector;
             Fire("Pos");
+            FireAnchors();
         }
         bool editMode = false;
         public bool EditMode

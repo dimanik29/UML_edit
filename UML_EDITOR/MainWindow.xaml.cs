@@ -25,12 +25,14 @@ namespace Lab5
 
             tabControl1.ItemsSource = graphs;
 
-            var node1 = new Node { Pos = new Point(200, 100), Text = "Node 1", Corner = 10 };
+            var node1 = new Node { Pos = new Point(200, 100), Text = "Node 1", Corner = 10, Width = 100,Height=40 };
             graph.Nodes.Add(node1);
-            var node2 = new Node { Pos = new Point(200, 200), Text = "Node 2", Corner = 100 };
+            var node2 = new Node { Pos = new Point(200, 200), Text = "Node 2", Corner = 100, Width = 100, Height = 40 };
             graph.Nodes.Add(node2);
 
-            var edge1 = new Edge { start = new Point(300, 300), finish = new Point(400, 400)};
+            node2.AddMethod("TestMethod");
+
+            var edge1 = new Edge { start = new Point(300, 300), finish = new Point(400, 400) };
             graph.Edges.Add(edge1);
 
             //DataContext = graph;
@@ -50,6 +52,7 @@ namespace Lab5
         }
 
         int i;
+        Border SizeNode;
         Point mousePress;
         Node _curNode;
         Node curNode
@@ -73,18 +76,19 @@ namespace Lab5
             }
         }
         //Point dig_edge = new Point(10,10);
+
         double mousePath;
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            
+
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var border = sender as Border;
                 Width_n.Text = ("Width" + "\n" + border.ActualWidth);
                 Height_n.Text = ("Height" + "\n" + border.ActualHeight);
                 var ic = (sender as ItemsControl);
-                var grid = (ic.Parent as Grid);
-                var selectRegion = grid.FindName("selectRegion") as Rectangle;
+                //var grid = (ic.Parent as Grid);
+                //var selectRegion = grid.FindName("selectRegion") as Rectangle;
 
                 if (e.ClickCount == 2)
                 {
@@ -117,7 +121,7 @@ namespace Lab5
                             }
                             else
                             {
-                                edge = new Edge { A = nodes[0], B = nodes[1], Dash = graph.edge_Dash }; 
+                                edge = new Edge { A = nodes[0], B = nodes[1], Dash = graph.edge_Dash };
                                 graph.Edges.Add(edge);
                             }
                             nodes[0].InvSelect();
@@ -128,14 +132,13 @@ namespace Lab5
                     }
                     else
                     {
-                        selectRegion.Visibility = System.Windows.Visibility.Collapsed;
+                        // selectRegion.Visibility = System.Windows.Visibility.Collapsed;
                         curNode = border.DataContext as Node;
                     }
                 }
                 e.Handled = true;
             }
         }
-
         private void Border_MouseMove(object sender, MouseEventArgs e)
         {
             if (curNode != null && !curNode.EditMode && e.LeftButton == MouseButtonState.Pressed && Keyboard.Modifiers != ModifierKeys.Shift)
@@ -170,7 +173,7 @@ namespace Lab5
                     mousePress = p;
                     if (curNode != null && curNode.Selected)
                         curNode.InvSelect();
-                    curNode = new Node { Pos = p, Text = "Node " + (graph.Nodes.Count() + 1), Corner = graph.Radius };
+                    curNode = new Node { Pos = p, Text = "Node " + (graph.Nodes.Count() + 1), Corner = graph.Radius, Width = 100, Height = 100 };
                     graph.Nodes.Add(curNode);
                     curNode.InvSelect();
                 }
@@ -241,7 +244,7 @@ namespace Lab5
             CreateButton.Visibility = Visibility.Visible;
             textBox_nameDiag.SelectAll();
             textBox_nameDiag.Focus();
-           // graphs.Add(new Graph{ Hedee = "322"});
+            // graphs.Add(new Graph{ Hedee = "322"});
         }
 
         private void ItemsControl_MouseMove(object sender, MouseEventArgs e)
@@ -249,9 +252,9 @@ namespace Lab5
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-               // var g = e.GetPosition(sender as IInputElement);
+                // var g = e.GetPosition(sender as IInputElement);
                 //var pr = g - selectRegionMousePress;
-                var ic =  sender as ItemsControl;
+                var ic = sender as ItemsControl;
                 var grid = (ic.Parent as Grid);
                 var selectRegion = grid.FindName("selectRegion") as Rectangle;
                 var tt = selectRegion.RenderTransform as TranslateTransform;
@@ -273,30 +276,30 @@ namespace Lab5
 
                     for (i = 0; i < sel.Length; i++)
                     {
-                        if (sel[i].Pos.X < selectRegionMousePress.X
-                            && sel[i].Pos.Y < selectRegionMousePress.Y
-                            && sel[i].Pos.X > g.X
-                            && sel[i].Pos.Y > g.Y
-                            || sel[i].Pos.X > selectRegionMousePress.X
-                            && sel[i].Pos.Y > selectRegionMousePress.Y
-                            && sel[i].Pos.X < g.X
-                            && sel[i].Pos.Y < g.Y
-                            || sel[i].Pos.X > selectRegionMousePress.X
-                            && sel[i].Pos.Y < selectRegionMousePress.Y
-                            && sel[i].Pos.X < g.X
-                            && sel[i].Pos.Y > g.Y
-                            || sel[i].Pos.X > selectRegionMousePress.X
-                            && sel[i].Pos.Y < selectRegionMousePress.Y
-                            && sel[i].Pos.X < g.X
-                            && sel[i].Pos.Y > g.Y
-                            || sel[i].Pos.X < selectRegionMousePress.X
-                            && sel[i].Pos.Y > selectRegionMousePress.Y
-                            && sel[i].Pos.X > g.X
-                            && sel[i].Pos.Y < g.Y
-                            || sel[i].Pos.X < selectRegionMousePress.X
-                            && sel[i].Pos.Y > selectRegionMousePress.Y
-                            && sel[i].Pos.X > g.X
-                            && sel[i].Pos.Y < g.Y)
+                        if (sel[i].Center.X < selectRegionMousePress.X
+                            && sel[i].Center.Y < selectRegionMousePress.Y
+                            && sel[i].Center.X > g.X
+                            && sel[i].Center.Y > g.Y
+                            || sel[i].Center.X > selectRegionMousePress.X
+                            && sel[i].Center.Y > selectRegionMousePress.Y
+                            && sel[i].Center.X < g.X
+                            && sel[i].Center.Y < g.Y
+                            || sel[i].Center.X > selectRegionMousePress.X
+                            && sel[i].Center.Y < selectRegionMousePress.Y
+                            && sel[i].Center.X < g.X
+                            && sel[i].Center.Y > g.Y
+                            || sel[i].Center.X > selectRegionMousePress.X
+                            && sel[i].Center.Y < selectRegionMousePress.Y
+                            && sel[i].Center.X < g.X
+                            && sel[i].Center.Y > g.Y
+                            || sel[i].Center.X < selectRegionMousePress.X
+                            && sel[i].Center.Y > selectRegionMousePress.Y
+                            && sel[i].Center.X > g.X
+                            && sel[i].Center.Y < g.Y
+                            || sel[i].Center.X < selectRegionMousePress.X
+                            && sel[i].Center.Y > selectRegionMousePress.Y
+                            && sel[i].Center.X > g.X
+                            && sel[i].Center.Y < g.Y)
                         {
                             sel[i].Select();
                         }
@@ -332,7 +335,7 @@ namespace Lab5
                             || sel_edges[i].finish.X < selectRegionMousePress.X
                             && sel_edges[i].finish.Y > selectRegionMousePress.Y
                             && sel_edges[i].finish.X > g.X
-                            && sel_edges[i].finish.Y < g.Y) 
+                            && sel_edges[i].finish.Y < g.Y)
                             || (sel_edges[i].start.X < selectRegionMousePress.X
                             && sel_edges[i].start.Y < selectRegionMousePress.Y
                             && sel_edges[i].start.X > g.X
@@ -476,21 +479,23 @@ namespace Lab5
 
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
-            graphs.Add(new Graph { Hedee = textBox_nameDiag.Text });
+            graphs.Add(new Graph { HeaderName = textBox_nameDiag.Text });
             Grid_create.Visibility = Visibility.Collapsed;
         }
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
-            graph.Hedee = textBox_nameDiag.Text;
+            graph.HeaderName = textBox_nameDiag.Text;
             //Не изменяется имя графа
+            textBox_nameDiag.SelectAll();
+            textBox_nameDiag.Focus();
             Grid_create.Visibility = Visibility.Collapsed;
         }
 
         private void StackPanel_MouseDown(object sender, MouseButtonEventArgs e)
         {
-            if(e.LeftButton == MouseButtonState.Pressed)
+            if (e.LeftButton == MouseButtonState.Pressed)
             {
-                if(e.ClickCount == 2)
+                if (e.ClickCount == 2)
                 {
                     Grid_create.Visibility = Visibility.Visible;
                     EditButton.Visibility = Visibility.Visible;
@@ -500,38 +505,101 @@ namespace Lab5
                 }
             }
         }
-        
-        private void Size_Changer_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            bool r = false;
-            //Size_Changer.Fill = new SolidColorBrush(Colors.DarkTurquoise);
-            var sel = sender as Rectangle;
-            var grid = (sel.Parent as Grid);
-            var Size_Changer = grid.FindName("Size_Changer") as Rectangle;
-            var tt_Size_Changer = Size_Changer.RenderTransform as TranslateTransform;
-            //var ghost_line = grid.FindName("ghost_line") as Line;
-            var g = e.GetPosition(grid);
-            var pr = g - selectRegionMousePress;
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                
-                if (e.ClickCount == 2)
-                {
-                    r = !r;
-                }
-                if (r== true)
-                {
-                    Size_Changer.Fill = new SolidColorBrush(Colors.DarkTurquoise);
-                }
-                else
-                {
-                    Size_Changer.Fill = new SolidColorBrush(Colors.Wheat);
-                }
-            }
-            e.Handled = false;
-        }
+
+        //private void Size_Changer_MouseDown(object sender, MouseButtonEventArgs e)
+        //{
+        //    bool r = false;
+        //    //Size_Changer.Fill = new SolidColorBrush(Colors.DarkTurquoise);
+        //    var sel = sender as Rectangle;
+        //    var grid = (sel.Parent as Grid);
+        //    var Size_Changer = grid.FindName("Size_Changer") as Rectangle;
+        //    var tt_Size_Changer = Size_Changer.RenderTransform as TranslateTransform;
+        //    //var ghost_line = grid.FindName("ghost_line") as Line;
+        //    var g = e.GetPosition(grid);
+        //    var pr = g - selectRegionMousePress;
+        //    if (e.LeftButton == MouseButtonState.Pressed)
+        //    {
+
+        //        if (e.ClickCount == 2)
+        //        {
+        //            r = !r;
+        //        }
+        //        if (r == true)
+        //        {
+        //            Size_Changer.Fill = new SolidColorBrush(Colors.DarkTurquoise);
+        //        }
+        //        else
+        //        {
+        //            Size_Changer.Fill = new SolidColorBrush(Colors.Wheat);
+        //        }
+        //    }
+        //    e.Handled = false;
+        //}
 
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+
+        }
+
+        private void border_node_MouseEnter(object sender, MouseEventArgs e)
+        {
+            var el = (sender as Border).DataContext as Node;
+            el.ResizeModOn();
+            SizeNode = (sender as Border);
+            Grid_create.Visibility = Visibility.Visible;
+        }
+
+        private void Canvas_MouseLeave(object sender, MouseEventArgs e)
+        {
+            var el = SizeNode.DataContext as Node;
+            el.ResizeModOff();
+        }
+        private void Rectangle_MouseMove_bot(Object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                // только для нижнего прямоугольника для размеров
+                // остальные по аналогии
+                var t = e.GetPosition(SizeNode);
+                var t2 = (SizeNode.DataContext as Node);
+                (sender as Rectangle).CaptureMouse();
+                t2.Resize(t2.Width, t.Y);
+                e.Handled = true;
+
+            }
+        }
+        private void Rectangle_MouseMove_right(Object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                // только для правого прямоугольника для размеров
+                // остальные по аналогии
+                var t = e.GetPosition(SizeNode);
+                var t2 = (SizeNode.DataContext as Node);
+                (sender as Rectangle).CaptureMouse();
+                t2.Resize(t.X, t2.Height);
+                e.Handled = true;
+            }
+        }
+        private void Rectangle_MouseMove_right_bot(Object sender, MouseEventArgs e)
+        {
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                // только для правого прямоугольника для размеров
+                // остальные по аналогии
+                var t = e.GetPosition(SizeNode);
+                var t2 = (SizeNode.DataContext as Node);
+                (sender as Rectangle).CaptureMouse();
+                t2.Resize(t.X, t.Y);
+                e.Handled = true;
+            }
+        }
+        private void Rectangle_MouseLeftButtonUp(Object sender, MouseButtonEventArgs e)
+        {
+            (sender as Rectangle).ReleaseMouseCapture();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
 
         }
