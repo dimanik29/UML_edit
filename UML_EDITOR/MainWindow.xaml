@@ -21,7 +21,6 @@
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
             <Button Content=" New " Height="40" Width="80" Click="Button_New"/>
             <Button Content=" Load " Height="40" Width="80" Click="Button_Load"/>
-            <Thumb Width="20"/>
             <Button Content=" Save " Height="40" Width="80" Click="Button_Save"/>
             <Button Content=" New_tab " Height="40" Width="80" Click="Button_newTab"/>
             <Grid Height="40" Width="80" x:Name="Grid_create" Visibility="Collapsed">
@@ -70,19 +69,6 @@
                 <DataTemplate>
                     <Grid>
 
-                        <!--<Rectangle x:Name="Size_Changer" Stroke="DarkViolet" StrokeThickness="1" StrokeDashArray="7 12" Fill="Wheat" Width="300" Height="200" Visibility="Visible"
-                                   HorizontalAlignment="Left" VerticalAlignment="Top" MouseDown="Size_Changer_MouseDown">
-                            <Rectangle.RenderTransform>
-                                <TranslateTransform x:Name="tt_Size_Changer"/>
-                            </Rectangle.RenderTransform>
-                        </Rectangle> предположительная область масштабирования-->
-
-                        <Rectangle x:Name="tap" Stroke="Black" StrokeThickness="2" Fill="Black" Width="8" Height="8">
-                            <Rectangle.RenderTransform>
-                                <TranslateTransform x:Name="tt_tap"/>
-                            </Rectangle.RenderTransform>
-                        </Rectangle>
-
                         <ItemsControl ItemsSource="{Binding Nodes}" ItemsPanel="{StaticResource cnv}"
                                       MouseDown="ItemsControl_MouseDown"
                                       MouseMove="ItemsControl_MouseMove"
@@ -91,16 +77,16 @@
                             <!--Mouse.MouseLeave="ItemsControl_MouseLeave"-->
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Canvas>
-                                        <Canvas.ContextMenu>
+                                    <Grid Height="Auto" Width="Auto" MouseLeave="Canvas_MouseLeave">
+                                        <Grid.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Header="Item" Click="MenuItem_Click">
-                                                    <MenuItem Header="item2"/>
-                                                    <Separator/>
+                                                    <!--<MenuItem Header="item2"/>
+                                                    <Separator/>-->
                                                 </MenuItem>
                                             </ContextMenu>
-                                        </Canvas.ContextMenu>
-                                        <Rectangle Fill="#0fff" Stroke="Purple" StrokeThickness="2" StrokeDashArray="1 2" Height="{Binding Height}" Width="{Binding Width}">
+                                        </Grid.ContextMenu>
+                                        <Rectangle Fill="#0fff" x:Name="Select_Rectangle" Visibility="{Binding SizeMode}" Stroke="Purple" StrokeThickness="2" StrokeDashArray="1 2" Height="{Binding Height}" Width="{Binding Width}">
                                             <Rectangle.RenderTransform>
                                                 <TransformGroup>
                                                     <TranslateTransform X="{Binding Pos.X}" Y="{Binding Pos.Y}"/>
@@ -113,10 +99,8 @@
                                         MouseMove="Border_MouseMove" Height="{Binding Height}" Width="{Binding Width}"
                                         MouseUp="Border_MouseUp" x:Name="border_node" MouseEnter="border_node_MouseEnter" Visibility="Visible">
                                         <Border.RenderTransform>
-                                            <TransformGroup>
-                                                <!--<TranslateTransform x:Name="bord_transform"/>-->
-                                                <!--<TranslateTransform X="-40" Y="-20"/>-->
-                                                <TranslateTransform X="{Binding Pos.X}" Y="{Binding Pos.Y}"/>
+                                                <TransformGroup>
+                                                    <TranslateTransform X="{Binding Pos.X}" Y="{Binding Pos.Y}"/>
                                             </TransformGroup>
                                         </Border.RenderTransform>
                                         <Border.BitmapEffect>
@@ -126,18 +110,18 @@
                                                 <Grid>
                                                     <StackPanel>
                                                         <Grid>
-                                                            <TextBox x:Name="tbx" TextWrapping="Wrap" BorderBrush="Transparent" Background="Transparent" Focusable="True"
-                           Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="10" Visibility="{Binding EditModeVisibility}"/>
-                                                            <TextBlock Text="{Binding Text}" FontSize="16" Margin="10" Visibility="{Binding ViewModeVisibility}" MouseDown="TextBlock_MouseDown"/>
+                                                            <TextBox x:Name="tbx" VerticalAlignment="Top" TextWrapping="Wrap" BorderBrush="Transparent" Background="Transparent" Focusable="True"
+                           Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="8,0,8,0" Visibility="{Binding EditModeVisibility}"/>
+                                                            <TextBlock Text="{Binding Text}" FontSize="16" VerticalAlignment="Top" Margin="8,0,8,0" Visibility="{Binding ViewModeVisibility}" MouseDown="TextBlock_MouseDown"/>
                                                         </Grid>
-                                                        <ItemsControl ItemsSource="{Binding Metods}"/>
+                                                        <TextBlock Text="{Binding Metods}" FontSize="10" TextAlignment="Center"/>
                                                     </StackPanel>
                                                 </Grid>
                                             </Viewbox>
                                     </Border>
                                         <Canvas Visibility="{Binding SizeMode}">
-                                            <Border BorderBrush="Blue" BorderThickness="2">
-                                                <Rectangle Fill="Wheat" Height="10" Width="10"
+                                            <Border BorderBrush="Gray" BorderThickness="2">
+                                                <Rectangle Fill="Wheat" Height="5" Width="5"
                                                    MouseMove="Rectangle_MouseMove_bot"
                                                    MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
                                                 <Border.RenderTransform>
@@ -146,8 +130,8 @@
                                                     </TransformGroup>
                                                 </Border.RenderTransform>
                                             </Border>
-                                            <Border BorderBrush="Blue" BorderThickness="2">
-                                                <Rectangle Fill="Gray" Height="10" Width="10"
+                                            <Border BorderBrush="Gray" BorderThickness="2">
+                                                <Rectangle Fill="Wheat" Height="5" Width="5"
                                                    MouseMove="Rectangle_MouseMove_right"
                                                    MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
                                                 <Border.RenderTransform>
@@ -156,8 +140,8 @@
                                                     </TransformGroup>
                                                 </Border.RenderTransform>
                                             </Border>
-                                            <Border BorderBrush="Blue" BorderThickness="2">
-                                                <Rectangle Fill="White" Height="10" Width="10"
+                                            <!--<Border BorderBrush="Gray" BorderThickness="2">
+                                                <Rectangle Fill="Wheat" Height="5" Width="5"
                                                    MouseMove="Rectangle_MouseMove_right_bot"
                                                    MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
                                                 <Border.RenderTransform>
@@ -165,9 +149,9 @@
                                                         <TranslateTransform X="{Binding Right_Bot.X}" Y="{Binding Right_Bot.Y}"/>
                                                     </TransformGroup>
                                                 </Border.RenderTransform>
-                                            </Border>
+                                            </Border>-->
                                         </Canvas>
-                                    </Canvas>
+                                    </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                             

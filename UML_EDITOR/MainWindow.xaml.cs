@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -22,6 +23,7 @@ namespace Lab5
             graphs.Add(new Graph());
 
             InitializeComponent();
+            
 
             tabControl1.ItemsSource = graphs;
 
@@ -30,7 +32,7 @@ namespace Lab5
             var node2 = new Node { Pos = new Point(200, 200), Text = "Node 2", Corner = 100, Width = 100, Height = 40 };
             graph.Nodes.Add(node2);
 
-            node2.AddMethod("TestMethod");
+
 
             var edge1 = new Edge { start = new Point(300, 300), finish = new Point(400, 400) };
             graph.Edges.Add(edge1);
@@ -87,6 +89,7 @@ namespace Lab5
                 Width_n.Text = ("Width" + "\n" + border.ActualWidth);
                 Height_n.Text = ("Height" + "\n" + border.ActualHeight);
                 var ic = (sender as ItemsControl);
+
                 //var grid = (ic.Parent as Grid);
                 //var selectRegion = grid.FindName("selectRegion") as Rectangle;
 
@@ -546,7 +549,6 @@ namespace Lab5
             var el = (sender as Border).DataContext as Node;
             el.ResizeModOn();
             SizeNode = (sender as Border);
-            Grid_create.Visibility = Visibility.Visible;
         }
 
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
@@ -565,7 +567,6 @@ namespace Lab5
                 (sender as Rectangle).CaptureMouse();
                 t2.Resize(t2.Width, t.Y);
                 e.Handled = true;
-
             }
         }
         private void Rectangle_MouseMove_right(Object sender, MouseEventArgs e)
@@ -601,7 +602,11 @@ namespace Lab5
 
         private void MenuItem_Click(object sender, RoutedEventArgs e)
         {
-
+            var dlg = new AddMethodDialog();
+            if (dlg.ShowDialog() == true)
+            {
+                (SizeNode.DataContext as Node).AddMethod(dlg.metod);
+            }
         }
     }
 }

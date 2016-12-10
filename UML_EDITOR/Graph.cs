@@ -62,6 +62,10 @@ namespace Lab5
 
     class Graph : ViewModelBase
     {
+        public Graph()
+        {
+
+        }
         //public string HeaderName { get { return "UML 1"; } }
         //string _Text;
         //public string Text  // полезные данные, характеризующие узел
@@ -135,11 +139,12 @@ namespace Lab5
         public Node()
         {
             SizeMode = Visibility.Hidden;
-            Metods = new List<string>();
+            metods = new StringBuilder();
         }
         public void AddMethod(string f)
         {
-            Metods.Add(f);
+            metods.Append(f);
+            metods.Append(Environment.NewLine);
             Fire(nameof(Metods));
         }
         //public event PropertyChangedEventHandler PropertyChanged;
@@ -159,7 +164,11 @@ namespace Lab5
 
         public Visibility SizeMode { get; set; }
 
-        public List<string> Metods;
+        private StringBuilder metods;
+        public string Metods
+        {
+            get { return metods.ToString(); }
+        }
 
         public double Width { get; set; }
         public double Height { get; set; }
@@ -193,7 +202,7 @@ namespace Lab5
             Fire("Right");
             //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Right)));
             Fire("Bot");
-            Fire(nameof(Right_Bot));
+            Fire(nameof(Right_Bot));//test
             Fire(nameof(Center));
             //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Bot)));
             //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Top)));
