@@ -27,9 +27,9 @@ namespace Lab5
 
             tabControl1.ItemsSource = graphs;
 
-            var node1 = new Node { Pos = new Point(200, 100), Text = "Node 1", Width = 100, Height = 40 };
+            var node1 = new Node { Pos = new Point(200, 100), Text = "Class 1", Width = 100, Height = 40 };
             graph.Nodes.Add(node1);
-            var node2 = new Node { Pos = new Point(200, 200), Text = "Node 2", Width = 100, Height = 40 };
+            var node2 = new Node { Pos = new Point(200, 200), Text = "Class 2", Width = 100, Height = 40 };
             graph.Nodes.Add(node2);
 
 
@@ -176,7 +176,7 @@ namespace Lab5
                     mousePress = p;
                     if (curNode != null && curNode.Selected)
                         curNode.InvSelect();
-                    curNode = new Node { Pos = p, Text = "Node " + (graph.Nodes.Count() + 1), Width = 100, Height = 100 };
+                    curNode = new Node { Pos = p, Text = "Class " + (graph.Nodes.Count() + 1), Width = 100, Height = 100 };
                     graph.Nodes.Add(curNode);
                     curNode.InvSelect();
                 }
@@ -584,6 +584,7 @@ namespace Lab5
             if (dlg.ShowDialog() == true)
             {
                 (SizeNode.DataContext as Node).AddMethod(dlg.metod);
+
             }
         }
 
@@ -675,9 +676,36 @@ namespace Lab5
             var ed_class_dlg = new Edit_class_name();
             if (ed_class_dlg.ShowDialog() == true)
             {
-                ed_class_dlg.TXT_DIALOG.SelectAll();
-                ed_class_dlg.TXT_DIALOG.Focus();
                 (SizeNode.DataContext as Node).Text = ed_class_dlg.name;
+                if (ed_class_dlg.stereotype == "entity")
+                {
+                    (SizeNode.DataContext as Node).StereotypeVis(1);
+                }
+                else if (ed_class_dlg.stereotype == "interface")
+                {
+                    (SizeNode.DataContext as Node).StereotypeVis(2);
+                }
+                else if (ed_class_dlg.stereotype == "control")
+                {
+                    (SizeNode.DataContext as Node).StereotypeVis(3);
+                }
+                else if (ed_class_dlg.stereotype == "boundary")
+                {
+                    (SizeNode.DataContext as Node).StereotypeVis(4);
+                }
+                else
+                {
+                    (SizeNode.DataContext as Node).StereotypeVis(5);
+                }
+            }
+        }
+
+        private void AddVariable_click(object sender, RoutedEventArgs e)
+        {
+            var var_add_dlg = new AddVariable();
+            if (var_add_dlg.ShowDialog() == true)
+            {
+                (SizeNode.DataContext as Node).AddVariable(var_add_dlg.variable);
             }
         }
     }

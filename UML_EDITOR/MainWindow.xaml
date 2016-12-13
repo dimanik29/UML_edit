@@ -31,7 +31,6 @@
                     <Button x:Name="EditButton" Content=" Edit " Height="21" Width="80" Click="EditButton_Click" Visibility="Collapsed"/>
                 </StackPanel>
             </Grid>
-            <!--<Button Content=" New_window " Height="40" Width="80" Click="Button_newWindow"/>-->
             <TextBlock Height="40" Width="80" x:Name="x_txt" TextAlignment="Center"/>
             <TextBlock Height="40" Width="80" x:Name="y_txt" TextAlignment="Center"/>
             <TextBlock Height="40" Width="80" x:Name="x_e" TextAlignment="Center"/>
@@ -78,8 +77,9 @@
                                     <Grid Height="Auto" Width="Auto" MouseLeave="Canvas_MouseLeave">
                                         <Grid.ContextMenu>
                                             <ContextMenu>
-                                                <MenuItem Header="Edit class name" Click="EditClassName_Item_Click"/>
-                                                <MenuItem Header="Add Method" Click="AddMethod_Item_Click">
+                                                <MenuItem Header="Edit class" Click="EditClassName_Item_Click"/>
+                                                <MenuItem Header="Add Method" Click="AddMethod_Item_Click"/>
+                                                <MenuItem Header="Add Variable" Click="AddVariable_click">
                                                     <!--<MenuItem Header="item2"/>
                                                     <Separator/>-->
                                                 </MenuItem>
@@ -105,10 +105,10 @@
                                                 <DropShadowBitmapEffect Opacity="{Binding ShadowOpacity}"/>
                                             </Border.BitmapEffect>
                                             <Grid>
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition Height="24"/>
-                                                        <RowDefinition Height="Auto"/>
-                                                    </Grid.RowDefinitions>
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition Height="24"/>
+                                                    <RowDefinition Height="Auto"/>
+                                                </Grid.RowDefinitions>
                                                 <StackPanel>
 
                                                 </StackPanel>
@@ -116,16 +116,16 @@
                                                     <StackPanel>
                                                         <!--<TextBox x:Name="tbx" VerticalAlignment="Top" TextWrapping="Wrap" BorderBrush="Transparent" Background="Transparent" Focusable="True"
                            Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="8,0,8,0" Visibility="{Binding EditModeVisibility}"/>-->
-                                                    <TextBlock Text="{Binding Text}" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="8,0,8,0" Visibility="{Binding ViewModeVisibility}"/>
-                                                    <Line X1="0" Y1="0" X2="200" Y2="0" Stroke="Black" StrokeThickness="3"/>
+                                                        <TextBlock Text="{Binding Text}" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="8,0,8,0" Visibility="{Binding ViewModeVisibility}"/>
+                                                        <Line X1="0" Y1="0" X2="200" Y2="0" Stroke="Black" StrokeThickness="3"/>
                                                     </StackPanel>
                                                 </Grid>
-                                                    <StackPanel Grid.Row="1">
-                                                    <TextBlock Text="{Binding Metods}" FontSize="14" Width="Auto" TextWrapping="Wrap" TextAlignment="Center"/>
-                                                    <!--<Line X1="0" Y1="0" X2="200" Y2="0" Stroke="Black" StrokeThickness="3"/>-->
+                                                <StackPanel Grid.Row="1">
+                                                    <TextBlock Text="{Binding Variables}" FontSize="12" Width="Auto" TextWrapping="Wrap" TextAlignment="Left"/>
                                                     <Line X1="0" Y1="0" X2="200" Y2="0" Stroke="Black" StrokeThickness="3"/>
+                                                    <TextBlock Text="{Binding Metods}" FontSize="12" Width="Auto" TextWrapping="Wrap" TextAlignment="Left"/>
                                                 </StackPanel>
-                                                </Grid>
+                                            </Grid>
                                         </Border>
                                         <Canvas Visibility="{Binding SizeMode}">
                                             <Border BorderBrush="Gray" BorderThickness="2">
@@ -159,34 +159,29 @@
                                                 </Border.RenderTransform>
                                             </Border>
                                         </Canvas>
+                                        <Image Source="icons\interface.png" Width="25" Margin="10,0,0,0" Height="25" Visibility="{Binding VisMode_stereotype_interface}">
+                                            <Image.RenderTransform>
+                                                <TranslateTransform X="{Binding Top_Centr.X}" Y="{Binding Top_Centr.Y}"/>
+                                            </Image.RenderTransform>
+                                        </Image>
+                                        <Image Source="icons\boundary.png" Width="25" Margin="10,0,0,0" Height="25" Visibility="{Binding VisMode_stereotype_boundary}">
+                                            <Image.RenderTransform>
+                                                <TranslateTransform X="{Binding Top_Centr.X}" Y="{Binding Top_Centr.Y}"/>
+                                            </Image.RenderTransform>
+                                        </Image>
+                                        <Image Source="icons\control.png" Width="25" Margin="10,0,0,0" Height="25" Visibility="{Binding VisMode_stereotype_control}">
+                                            <Image.RenderTransform>
+                                                <TranslateTransform X="{Binding Top_Centr.X}" Y="{Binding Top_Centr.Y}"/>
+                                            </Image.RenderTransform>
+                                        </Image>
+                                        <Image Source="icons\entity.png" Width="25" Margin="10,0,0,0" Height="25" Visibility="{Binding VisMode_stereotype_entity}">
+                                            <Image.RenderTransform>
+                                                <TranslateTransform X="{Binding Top_Centr.X}" Y="{Binding Top_Centr.Y}"/>
+                                            </Image.RenderTransform>
+                                        </Image>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
-
-                            <!--<DataTemplate>
-                                <Canvas Visibility="{Binding SizeMode}">
-                                    <Border BorderBrush="Blue" BorderThickness="2">
-                                        <Rectangle Fill="Green" Height="10" Width="10"
-                               MouseMove="Rectangle_MouseMove_bot"
-                               MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
-                                        <Border.RenderTransform>
-                                            <TransformGroup>
-                                                <TranslateTransform X="{Binding Bot.X}" Y="{Binding Bot.Y}"/>
-                                            </TransformGroup>
-                                        </Border.RenderTransform>
-                                    </Border>
-                                    <Border BorderBrush="Blue" BorderThickness="2">
-                                        <Rectangle Fill="Red" Height="10" Width="10"
-                               MouseMove="Rectangle_MouseMove_right"
-                               MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
-                                        <Border.RenderTransform>
-                                            <TransformGroup>
-                                                <TranslateTransform X="{Binding Right.X}" Y="{Binding Right.Y}"/>
-                                            </TransformGroup>
-                                        </Border.RenderTransform>
-                                    </Border>
-                                </Canvas>
-                            </DataTemplate>-->
                         </ItemsControl>
 
 

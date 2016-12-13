@@ -15,23 +15,20 @@ using System.Windows.Shapes;
 namespace Lab5
 {
     /// <summary>
-    /// Логика взаимодействия для AddMethodDialog.xaml
+    /// Логика взаимодействия для AddVariable.xaml
     /// </summary>
-    public partial class AddMethodDialog : Window
+    public partial class AddVariable : Window
     {
-        public string parametr;
         public string type;
-        public string metod;
-        public AddMethodDialog()
+        public string variable;
+        public AddVariable()
         {
             InitializeComponent();
         }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
-            parametr = TXT_SCOBE.Text;
-            metod = type + TXT_DIALOG.Text +"(" + parametr + ")";
+            variable = type + TXT_DIALOG.Text;
         }
 
         private void RadioButton_public(object sender, RoutedEventArgs e)

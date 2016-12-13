@@ -138,12 +138,28 @@ namespace Lab5
         {
             SizeMode = Visibility.Hidden;
             metods = new StringBuilder();
+            variables = new StringBuilder();
+            VisMode_stereotype_interface = Visibility.Collapsed;
+            VisMode_stereotype_control = Visibility.Collapsed;
+            VisMode_stereotype_boundary = Visibility.Collapsed;
+            VisMode_stereotype_entity = Visibility.Collapsed;
+        }
+        public void AddVariable(string f)
+        {
+            variables.Append(f);
+            variables.Append(Environment.NewLine);
+            Fire(nameof(Variables));
         }
         public void AddMethod(string f)
         {
             metods.Append(f);
             metods.Append(Environment.NewLine);
             Fire(nameof(Metods));
+        }
+        private StringBuilder variables;
+        public string Variables
+        {
+            get { return variables.ToString(); }
         }
         private StringBuilder metods;
         public string Metods
@@ -164,11 +180,72 @@ namespace Lab5
         public Point Center { get { return new Point(Pos.X + (int)Width / 2, Pos.Y + (int)Height/2  ); } }
         public Point Right { get { return new Point(Pos.X + Width, (int)Height / 2 + Pos.Y); } }
         public Point Right_Bot { get { return new Point((Pos.X + Width)-1, (Height + Pos.Y)-1); } }
+        public Point Top_Centr { get { return new Point((Pos.X), Pos.Y - (Height/2)-18); } }
 
         public Visibility SizeMode { get; set; }
+        public Visibility VisMode_stereotype_interface { get; set; }
+        public Visibility VisMode_stereotype_control { get; set; }
+        public Visibility VisMode_stereotype_boundary { get; set; }
+        public Visibility VisMode_stereotype_entity { get; set; }
 
-
-
+        public void StereotypeVis(int f)
+        {
+            switch (f)
+            {
+                case 1:
+                    VisMode_stereotype_interface = Visibility.Collapsed;
+                    VisMode_stereotype_control = Visibility.Collapsed;
+                    VisMode_stereotype_boundary = Visibility.Collapsed;
+                    VisMode_stereotype_entity = Visibility.Visible;
+                    Fire(nameof(VisMode_stereotype_boundary));
+                    Fire(nameof(VisMode_stereotype_control));
+                    Fire(nameof(VisMode_stereotype_entity));
+                    Fire(nameof(VisMode_stereotype_interface));
+                    break;
+                case 2:
+                    VisMode_stereotype_interface = Visibility.Visible;
+                    VisMode_stereotype_control = Visibility.Collapsed;
+                    VisMode_stereotype_boundary = Visibility.Collapsed;
+                    VisMode_stereotype_entity = Visibility.Collapsed;
+                    Fire(nameof(VisMode_stereotype_boundary));
+                    Fire(nameof(VisMode_stereotype_control));
+                    Fire(nameof(VisMode_stereotype_entity));
+                    Fire(nameof(VisMode_stereotype_interface));
+                    break;
+                case 3:
+                    VisMode_stereotype_interface = Visibility.Collapsed;
+                    VisMode_stereotype_control = Visibility.Visible;
+                    VisMode_stereotype_boundary = Visibility.Collapsed;
+                    VisMode_stereotype_entity = Visibility.Collapsed;
+                    Fire(nameof(VisMode_stereotype_boundary));
+                    Fire(nameof(VisMode_stereotype_control));
+                    Fire(nameof(VisMode_stereotype_entity));
+                    Fire(nameof(VisMode_stereotype_interface));
+                    break;
+                case 4:
+                    VisMode_stereotype_interface = Visibility.Collapsed;
+                    VisMode_stereotype_control = Visibility.Collapsed;
+                    VisMode_stereotype_boundary = Visibility.Visible;
+                    VisMode_stereotype_entity = Visibility.Collapsed;
+                    Fire(nameof(VisMode_stereotype_boundary));
+                    Fire(nameof(VisMode_stereotype_control));
+                    Fire(nameof(VisMode_stereotype_entity));
+                    Fire(nameof(VisMode_stereotype_interface));
+                    break;
+                case 5:
+                    VisMode_stereotype_interface = Visibility.Collapsed;
+                    VisMode_stereotype_control = Visibility.Collapsed;
+                    VisMode_stereotype_boundary = Visibility.Collapsed;
+                    VisMode_stereotype_entity = Visibility.Collapsed;
+                    Fire(nameof(VisMode_stereotype_boundary));
+                    Fire(nameof(VisMode_stereotype_control));
+                    Fire(nameof(VisMode_stereotype_entity));
+                    Fire(nameof(VisMode_stereotype_interface));
+                    break;
+            }
+            //VisMode_stereotype = Visibility.Visible;
+            //Fire(nameof(VisMode_stereotype));
+        }
 
         public double Width { get; set; }
         public double Height { get; set; }
@@ -183,7 +260,6 @@ namespace Lab5
         {
             SizeMode = Visibility.Hidden;
             Fire("SizeMode");
-            //Pch?.Invoke(this, new PropertyChangedEventArgs(nameof(SizeMode)));
         }
         public void Resize(double w, double h)
         {
@@ -200,12 +276,10 @@ namespace Lab5
         {
             //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Left)));
             Fire("Right");
-            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Right)));
             Fire("Bot");
             Fire(nameof(Right_Bot));//test
             Fire(nameof(Center));
-            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Bot)));
-            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Top)));
+            Fire(nameof(Top_Centr));
         }
 
         bool selected;

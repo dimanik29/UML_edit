@@ -58,6 +58,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="AddVariable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Edit_class_name.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -68,6 +72,9 @@
     </Page>
     <Compile Include="AddMethodDialog.xaml.cs">
       <DependentUpon>AddMethodDialog.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="AddVariable.xaml.cs">
+      <DependentUpon>AddVariable.xaml</DependentUpon>
     </Compile>
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
@@ -112,6 +119,14 @@
   <ItemGroup>
     <Resource Include="new_icons\close.png" />
     <Resource Include="icons\close.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\interface.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="icons\boundary.png" />
+    <Resource Include="icons\control.png" />
+    <Resource Include="icons\entity.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

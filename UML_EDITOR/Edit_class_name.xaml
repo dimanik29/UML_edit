@@ -5,13 +5,30 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab5"
         mc:Ignorable="d"
-        Title="Имя Класса" Height="160" Width="260" ResizeMode="NoResize">
+        Title="Имя Класса" Height="190" Width="260" ResizeMode="NoResize">
     <Grid>
         <Label Content="Введите имя класса:" FontSize="13" Margin="20,0,0,0" FontWeight="DemiBold"/>
         <Grid Margin="0,30,0,0">
             <StackPanel>
-                <TextBox x:Name="TXT_DIALOG" Width="200" Height="34" FontSize="21" Text="Имя класса" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Top" Margin="20,0,20,20" />
-                <Button Content="OK" Click="Button_Click" Width="64" Height="20" HorizontalAlignment="Right" Margin="0,0,22,0" Background="#FF9AF3EB" BorderBrush="#FFA896A7" Foreground="#FF535353"/>
+                <TextBox x:Name="TXT_DIALOG" Width="200" Height="20" FontSize="14" Text="Имя класса" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Top" Margin="20,0,20,20" />
+                <TextBlock FontWeight="DemiBold" Margin="20,-14,0,10" Text="Укажите стереотип"/>
+                <ComboBox SelectionChanged="stereotype_comboBox_SelectionChanged" HorizontalAlignment="Left" Margin="24,0,0,0" Width="198" x:Name="stereotype_comboBox" Height="23">
+                    <ComboBoxItem IsSelected="True">
+                        <TextBlock Text="entity"/>
+                    </ComboBoxItem>
+                    <TextBlock Text="boundary"/>
+                    <TextBlock Text="control"/>
+                    <TextBlock Text="interface"/>
+                    <TextBlock Text="actor"/>
+                    <TextBlock Text="auxiliary"/>
+                    <TextBlock Text="enum"/>
+                    <TextBlock Text="exception"/>
+                    <TextBlock Text="focus"/>
+                    <TextBlock Text="struct"/>
+                    <TextBlock Text="type"/>
+                    <TextBlock Text="utility"/>
+                </ComboBox>
+                <Button Content="OK" Click="Button_Click" Width="64" Height="20" HorizontalAlignment="Right" Margin="0,20,22,0" Background="#FFF3F799" BorderBrush="#FFCD7711" Foreground="#FF253242"/>
             </StackPanel>
         </Grid>
     </Grid>
