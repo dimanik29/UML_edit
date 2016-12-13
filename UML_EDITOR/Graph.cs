@@ -90,8 +90,7 @@ namespace Lab5
             sb.AppendLine("" + Nodes.Count + "\t" + Edges.Count);
             foreach (var node in Nodes)
             {
-                int corn = node.Corner;
-                sb.AppendLine(node.ToString() + "\t" + "Corner = " + corn);
+                sb.AppendLine(node.ToString() + "\t" + "Corner = ");
             }
             foreach (var edge in Edges)
             {
@@ -125,7 +124,6 @@ namespace Lab5
             Nodes.Clear();
             Edges.Clear();
         }
-        public int Radius;
         public string edge_Dash;
 
         public override string ToString()
@@ -147,28 +145,30 @@ namespace Lab5
             metods.Append(Environment.NewLine);
             Fire(nameof(Metods));
         }
-        //public event PropertyChangedEventHandler PropertyChanged;
-        string _Text;
-        public string Text  // полезные данные, характеризующие узел
-        {
-            get { return _Text; }
-            set { Set(ref _Text, value, "Text"); }
-        }
-        public int Corner { get; set; }
-
-        public Point Pos { get; set; }   //  узла на Canvas, нужна только для View
-        public Point Bot { get { return new Point(Pos.X + (int)Width / 2, Height + Pos.Y); } }
-        public Point Center { get { return new Point(Pos.X + (int)Width / 2, Pos.Y + (int)Height/2  ); } }
-        public Point Right { get { return new Point(Pos.X + Width, (int)Height / 2 + Pos.Y); } }
-        public Point Right_Bot { get { return new Point(Pos.X + Width, Height + Pos.Y); } }
-
-        public Visibility SizeMode { get; set; }
-
         private StringBuilder metods;
         public string Metods
         {
             get { return metods.ToString(); }
         }
+        //public event PropertyChangedEventHandler PropertyChanged;
+        string _Text;
+        public string Text  // полезные данные, характеризующие узел
+        {
+            get { return _Text; }
+            set { Set(ref _Text, value); }
+        }
+        
+
+        public Point Pos { get; set; }   //  узла на Canvas, нужна только для View
+        public Point Bot { get { return new Point(Pos.X + (int)Width / 2, Height + Pos.Y); } }
+        public Point Center { get { return new Point(Pos.X + (int)Width / 2, Pos.Y + (int)Height/2  ); } }
+        public Point Right { get { return new Point(Pos.X + Width, (int)Height / 2 + Pos.Y); } }
+        public Point Right_Bot { get { return new Point((Pos.X + Width)-1, (Height + Pos.Y)-1); } }
+
+        public Visibility SizeMode { get; set; }
+
+
+
 
         public double Width { get; set; }
         public double Height { get; set; }
@@ -187,7 +187,7 @@ namespace Lab5
         }
         public void Resize(double w, double h)
         {
-            if (w > 50)
+            if (w > 50 && w < 203)
             Width = w;
             if(h>50)
             Height = h;

@@ -23,13 +23,13 @@ namespace Lab5
             graphs.Add(new Graph());
 
             InitializeComponent();
-            
+
 
             tabControl1.ItemsSource = graphs;
 
-            var node1 = new Node { Pos = new Point(200, 100), Text = "Node 1", Corner = 10, Width = 100,Height=40 };
+            var node1 = new Node { Pos = new Point(200, 100), Text = "Node 1", Width = 100, Height = 40 };
             graph.Nodes.Add(node1);
-            var node2 = new Node { Pos = new Point(200, 200), Text = "Node 2", Corner = 100, Width = 100, Height = 40 };
+            var node2 = new Node { Pos = new Point(200, 200), Text = "Node 2", Width = 100, Height = 40 };
             graph.Nodes.Add(node2);
 
 
@@ -88,17 +88,17 @@ namespace Lab5
                 var border = sender as Border;
                 Width_n.Text = ("Width" + "\n" + border.ActualWidth);
                 Height_n.Text = ("Height" + "\n" + border.ActualHeight);
-                var ic = (sender as ItemsControl);
-
-                //var grid = (ic.Parent as Grid);
+                //var ic = border.Parent as ItemsControl;
+                var grid = (border.Parent as Grid);
+                var grid_par = grid.Parent as ItemsControl;
                 //var selectRegion = grid.FindName("selectRegion") as Rectangle;
 
                 if (e.ClickCount == 2)
                 {
                     (border.DataContext as Node).EditMode = true;
                     var tbx = border.FindName("tbx") as TextBox;
-                    tbx.SelectAll();
-                    tbx.Focus();
+                    //tbx.SelectAll();
+                    //tbx.Focus();
                 }
                 else
                 {
@@ -135,7 +135,7 @@ namespace Lab5
                     }
                     else
                     {
-                        // selectRegion.Visibility = System.Windows.Visibility.Collapsed;
+                        selectRegion.Visibility = System.Windows.Visibility.Collapsed;
                         curNode = border.DataContext as Node;
                     }
                 }
@@ -176,7 +176,7 @@ namespace Lab5
                     mousePress = p;
                     if (curNode != null && curNode.Selected)
                         curNode.InvSelect();
-                    curNode = new Node { Pos = p, Text = "Node " + (graph.Nodes.Count() + 1), Corner = graph.Radius, Width = 100, Height = 100 };
+                    curNode = new Node { Pos = p, Text = "Node " + (graph.Nodes.Count() + 1), Width = 100, Height = 100 };
                     graph.Nodes.Add(curNode);
                     curNode.InvSelect();
                 }
@@ -249,7 +249,6 @@ namespace Lab5
             textBox_nameDiag.Focus();
             // graphs.Add(new Graph{ Hedee = "322"});
         }
-
         private void ItemsControl_MouseMove(object sender, MouseEventArgs e)
         {
 
@@ -259,8 +258,8 @@ namespace Lab5
                 //var pr = g - selectRegionMousePress;
                 var ic = sender as ItemsControl;
                 var grid = (ic.Parent as Grid);
-                var selectRegion = grid.FindName("selectRegion") as Rectangle;
-                var tt = selectRegion.RenderTransform as TranslateTransform;
+                //var selectRegion = grid.FindName("selectRegion") as Rectangle;
+                //var tt = selectRegion.RenderTransform as TranslateTransform;
                 var ghost_line = grid.FindName("ghost_line") as Line;
                 var g = e.GetPosition(grid);
                 var pr = g - selectRegionMousePress;
@@ -269,151 +268,149 @@ namespace Lab5
 
                 if (Keyboard.Modifiers != ModifierKeys.Shift && Keyboard.Modifiers != ModifierKeys.Alt)
                 {
-                    selectRegion.Width = Math.Abs(pr.X);
-                    tt.X = Math.Min(g.X, selectRegionMousePress.X);
-                    selectRegion.Height = Math.Abs(pr.Y);
-                    tt.Y = Math.Min(g.Y, selectRegionMousePress.Y);
+                    //selectRegion.Width = Math.Abs(pr.X);
+                    //tt.X = Math.Min(g.X, selectRegionMousePress.X);
+                    //selectRegion.Height = Math.Abs(pr.Y);
+                    //tt.Y = Math.Min(g.Y, selectRegionMousePress.Y);
 
 
-                    var sel = graph.Nodes.Where(x => x.Pos != null).ToArray();
+                    //var sel = graph.Nodes.Where(x => x.Pos != null).ToArray();
 
-                    for (i = 0; i < sel.Length; i++)
-                    {
-                        if (sel[i].Center.X < selectRegionMousePress.X
-                            && sel[i].Center.Y < selectRegionMousePress.Y
-                            && sel[i].Center.X > g.X
-                            && sel[i].Center.Y > g.Y
-                            || sel[i].Center.X > selectRegionMousePress.X
-                            && sel[i].Center.Y > selectRegionMousePress.Y
-                            && sel[i].Center.X < g.X
-                            && sel[i].Center.Y < g.Y
-                            || sel[i].Center.X > selectRegionMousePress.X
-                            && sel[i].Center.Y < selectRegionMousePress.Y
-                            && sel[i].Center.X < g.X
-                            && sel[i].Center.Y > g.Y
-                            || sel[i].Center.X > selectRegionMousePress.X
-                            && sel[i].Center.Y < selectRegionMousePress.Y
-                            && sel[i].Center.X < g.X
-                            && sel[i].Center.Y > g.Y
-                            || sel[i].Center.X < selectRegionMousePress.X
-                            && sel[i].Center.Y > selectRegionMousePress.Y
-                            && sel[i].Center.X > g.X
-                            && sel[i].Center.Y < g.Y
-                            || sel[i].Center.X < selectRegionMousePress.X
-                            && sel[i].Center.Y > selectRegionMousePress.Y
-                            && sel[i].Center.X > g.X
-                            && sel[i].Center.Y < g.Y)
-                        {
-                            sel[i].Select();
-                        }
-                        else
-                        {
-                            sel[i].UnSelect();
-                        }
-                    }
-                    var sel_edges = graph.Edges.Where(x => x.finish != null).ToArray();
+                    //for (i = 0; i < sel.Length; i++)
+                    //{
+                    //    if (sel[i].Center.X < selectRegionMousePress.X
+                    //        && sel[i].Center.Y < selectRegionMousePress.Y
+                    //        && sel[i].Center.X > g.X
+                    //        && sel[i].Center.Y > g.Y
+                    //        || sel[i].Center.X > selectRegionMousePress.X
+                    //        && sel[i].Center.Y > selectRegionMousePress.Y
+                    //        && sel[i].Center.X < g.X
+                    //        && sel[i].Center.Y < g.Y
+                    //        || sel[i].Center.X > selectRegionMousePress.X
+                    //        && sel[i].Center.Y < selectRegionMousePress.Y
+                    //        && sel[i].Center.X < g.X
+                    //        && sel[i].Center.Y > g.Y
+                    //        || sel[i].Center.X > selectRegionMousePress.X
+                    //        && sel[i].Center.Y < selectRegionMousePress.Y
+                    //        && sel[i].Center.X < g.X
+                    //        && sel[i].Center.Y > g.Y
+                    //        || sel[i].Center.X < selectRegionMousePress.X
+                    //        && sel[i].Center.Y > selectRegionMousePress.Y
+                    //        && sel[i].Center.X > g.X
+                    //        && sel[i].Center.Y < g.Y
+                    //        || sel[i].Center.X < selectRegionMousePress.X
+                    //        && sel[i].Center.Y > selectRegionMousePress.Y
+                    //        && sel[i].Center.X > g.X
+                    //        && sel[i].Center.Y < g.Y)
+                    //    {
+                    //        sel[i].Select();
+                    //    }
+                    //    else
+                    //    {
+                    //        sel[i].UnSelect();
+                    //    }
+                    //}
 
-                    for (int i = 0; i < sel_edges.Length; i++)
-                    {
-                        if ((sel_edges[i].finish.X < selectRegionMousePress.X
-                            && sel_edges[i].finish.Y < selectRegionMousePress.Y
-                            && sel_edges[i].finish.X > g.X
-                            && sel_edges[i].finish.Y > g.Y
-                            || sel_edges[i].finish.X > selectRegionMousePress.X
-                            && sel_edges[i].finish.Y > selectRegionMousePress.Y
-                            && sel_edges[i].finish.X < g.X
-                            && sel_edges[i].finish.Y < g.Y
-                            || sel_edges[i].finish.X > selectRegionMousePress.X
-                            && sel_edges[i].finish.Y < selectRegionMousePress.Y
-                            && sel_edges[i].finish.X < g.X
-                            && sel_edges[i].finish.Y > g.Y
-                            || sel_edges[i].finish.X > selectRegionMousePress.X
-                            && sel_edges[i].finish.Y < selectRegionMousePress.Y
-                            && sel_edges[i].finish.X < g.X
-                            && sel_edges[i].finish.Y > g.Y
-                            || sel_edges[i].finish.X < selectRegionMousePress.X
-                            && sel_edges[i].finish.Y > selectRegionMousePress.Y
-                            && sel_edges[i].finish.X > g.X
-                            && sel_edges[i].finish.Y < g.Y
-                            || sel_edges[i].finish.X < selectRegionMousePress.X
-                            && sel_edges[i].finish.Y > selectRegionMousePress.Y
-                            && sel_edges[i].finish.X > g.X
-                            && sel_edges[i].finish.Y < g.Y)
-                            || (sel_edges[i].start.X < selectRegionMousePress.X
-                            && sel_edges[i].start.Y < selectRegionMousePress.Y
-                            && sel_edges[i].start.X > g.X
-                            && sel_edges[i].start.Y > g.Y
-                            || sel_edges[i].start.X > selectRegionMousePress.X
-                            && sel_edges[i].start.Y > selectRegionMousePress.Y
-                            && sel_edges[i].start.X < g.X
-                            && sel_edges[i].start.Y < g.Y
-                            || sel_edges[i].start.X > selectRegionMousePress.X
-                            && sel_edges[i].start.Y < selectRegionMousePress.Y
-                            && sel_edges[i].start.X < g.X
-                            && sel_edges[i].start.Y > g.Y
-                            || sel_edges[i].start.X > selectRegionMousePress.X
-                            && sel_edges[i].start.Y < selectRegionMousePress.Y
-                            && sel_edges[i].start.X < g.X
-                            && sel_edges[i].start.Y > g.Y
-                            || sel_edges[i].start.X < selectRegionMousePress.X
-                            && sel_edges[i].start.Y > selectRegionMousePress.Y
-                            && sel_edges[i].start.X > g.X
-                            && sel_edges[i].start.Y < g.Y
-                            || sel_edges[i].start.X < selectRegionMousePress.X
-                            && sel_edges[i].start.Y > selectRegionMousePress.Y
-                            && sel_edges[i].start.X > g.X
-                            && sel_edges[i].start.Y < g.Y))
-                        {
-                            sel_edges[i].Select();
-                        }
-                        else
-                        {
-                            sel_edges[i].UnSelect();
-                        }
-                    }
+                    //var sel_edges = graph.Edges.Where(x => x.finish != null).ToArray();
+
+                    //for (int i = 0; i < sel_edges.Length; i++)
+                    //{
+                    //    if ((sel_edges[i].finish.X < selectRegionMousePress.X
+                    //        && sel_edges[i].finish.Y < selectRegionMousePress.Y
+                    //        && sel_edges[i].finish.X > g.X
+                    //        && sel_edges[i].finish.Y > g.Y
+                    //        || sel_edges[i].finish.X > selectRegionMousePress.X
+                    //        && sel_edges[i].finish.Y > selectRegionMousePress.Y
+                    //        && sel_edges[i].finish.X < g.X
+                    //        && sel_edges[i].finish.Y < g.Y
+                    //        || sel_edges[i].finish.X > selectRegionMousePress.X
+                    //        && sel_edges[i].finish.Y < selectRegionMousePress.Y
+                    //        && sel_edges[i].finish.X < g.X
+                    //        && sel_edges[i].finish.Y > g.Y
+                    //        || sel_edges[i].finish.X > selectRegionMousePress.X
+                    //        && sel_edges[i].finish.Y < selectRegionMousePress.Y
+                    //        && sel_edges[i].finish.X < g.X
+                    //        && sel_edges[i].finish.Y > g.Y
+                    //        || sel_edges[i].finish.X < selectRegionMousePress.X
+                    //        && sel_edges[i].finish.Y > selectRegionMousePress.Y
+                    //        && sel_edges[i].finish.X > g.X
+                    //        && sel_edges[i].finish.Y < g.Y
+                    //        || sel_edges[i].finish.X < selectRegionMousePress.X
+                    //        && sel_edges[i].finish.Y > selectRegionMousePress.Y
+                    //        && sel_edges[i].finish.X > g.X
+                    //        && sel_edges[i].finish.Y < g.Y)
+                    //        || (sel_edges[i].start.X < selectRegionMousePress.X
+                    //        && sel_edges[i].start.Y < selectRegionMousePress.Y
+                    //        && sel_edges[i].start.X > g.X
+                    //        && sel_edges[i].start.Y > g.Y
+                    //        || sel_edges[i].start.X > selectRegionMousePress.X
+                    //        && sel_edges[i].start.Y > selectRegionMousePress.Y
+                    //        && sel_edges[i].start.X < g.X
+                    //        && sel_edges[i].start.Y < g.Y
+                    //        || sel_edges[i].start.X > selectRegionMousePress.X
+                    //        && sel_edges[i].start.Y < selectRegionMousePress.Y
+                    //        && sel_edges[i].start.X < g.X
+                    //        && sel_edges[i].start.Y > g.Y
+                    //        || sel_edges[i].start.X > selectRegionMousePress.X
+                    //        && sel_edges[i].start.Y < selectRegionMousePress.Y
+                    //        && sel_edges[i].start.X < g.X
+                    //        && sel_edges[i].start.Y > g.Y
+                    //        || sel_edges[i].start.X < selectRegionMousePress.X
+                    //        && sel_edges[i].start.Y > selectRegionMousePress.Y
+                    //        && sel_edges[i].start.X > g.X
+                    //        && sel_edges[i].start.Y < g.Y
+                    //        || sel_edges[i].start.X < selectRegionMousePress.X
+                    //        && sel_edges[i].start.Y > selectRegionMousePress.Y
+                    //        && sel_edges[i].start.X > g.X
+                    //        && sel_edges[i].start.Y < g.Y))
+                    //    {
+                    //        sel_edges[i].Select();
+                    //    }
+                    //    else
+                    //    {
+                    //        sel_edges[i].UnSelect();
+                    //    }
+                    //}
 
 
                     x_e.Text = Convert.ToString(selectRegionMousePress.X);
                     y_e.Text = Convert.ToString(selectRegionMousePress.Y);
                     x_txt.Text = Convert.ToString(g.X);
                     y_txt.Text = Convert.ToString(g.Y);
+                    
+                    //selectRegion.Visibility = System.Windows.Visibility.Visible;
 
-
-
-                    selectRegion.Visibility = System.Windows.Visibility.Visible;
                 }
-                else if (Keyboard.Modifiers == ModifierKeys.Alt)
-                {
-                    ghost_line.Visibility = System.Windows.Visibility.Visible;
-                    ghost_line.X1 = selectRegionMousePress.X;
-                    ghost_line.Y1 = selectRegionMousePress.Y;
-                    ghost_line.X2 = g.X;
-                    ghost_line.Y2 = g.Y;
-                }
+                //else if (Keyboard.Modifiers == ModifierKeys.Alt)
+                //{
+                //    ghost_line.Visibility = System.Windows.Visibility.Visible;
+                //    ghost_line.X1 = selectRegionMousePress.X;
+                //    ghost_line.Y1 = selectRegionMousePress.Y;
+                //    ghost_line.X2 = g.X;
+                //    ghost_line.Y2 = g.Y;
+                //}
             }
         }
-
         private void ItemsControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var ic = sender as ItemsControl;
             var grid = (ic.Parent as Grid);
             var c = grid.Children;
-            var selectRegion = grid.FindName("selectRegion") as Rectangle;
-            var ghost_line = grid.FindName("ghost_line") as Line;
+            ///var selectRegion = grid.FindName("selectRegion") as Rectangle;
+            //var ghost_line = grid.FindName("ghost_line") as Line;
 
-            var tt = selectRegion.FindName("tt") as TranslateTransform;
+            //var tt = selectRegion.FindName("tt") as TranslateTransform;
 
             var g = e.GetPosition(ic);
             selectRegion.Visibility = System.Windows.Visibility.Collapsed;
 
-            ghost_line.Visibility = System.Windows.Visibility.Collapsed;
-            if (Keyboard.Modifiers == ModifierKeys.Alt)
-            {
-                var edge = new Edge { start = selectRegionMousePress, finish = g };
-                graph.Edges.Add(edge);
-            }
+            //ghost_line.Visibility = System.Windows.Visibility.Collapsed;
+            //if (Keyboard.Modifiers == ModifierKeys.Alt)
+            //{
+            //    var edge = new Edge { start = selectRegionMousePress, finish = g };
+            //    graph.Edges.Add(edge);
+            //}
         }
-
         private void Window_MouseUp(object sender, MouseButtonEventArgs e)
         {
             var win = sender as Window;
@@ -422,17 +419,14 @@ namespace Lab5
 
             //selectRegion.Visibility = System.Windows.Visibility.Collapsed;
         }
-
         private void Square_Checked(object sender, RoutedEventArgs e)
         {
-            graph.Radius = 10;
+            //graph.Radius = 0;
         }
-
         private void Oval_Checked(object sender, RoutedEventArgs e)
         {
-            graph.Radius = 100;
+            //graph.Radius = 100;
         }
-
         private void Line_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -445,41 +439,25 @@ namespace Lab5
         {
             graph.edge_Dash = "2 0.3";
         }
-
         private void Line_Equal_Checked(object sender, RoutedEventArgs e)
         {
             graph.edge_Dash = "1 0";
         }
-
         private void selectRegion_MouseMove(object sender, MouseEventArgs e)
         {
-            var selectRegion = sender as Rectangle;
-            var grid = selectRegion.Parent as Grid;
-            var g = e.GetPosition(grid);
-            var pr = g - selectRegionMousePress;
-            var tt = selectRegion.RenderTransform as TranslateTransform;
-
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                selectRegion.Width = Math.Abs(pr.X);
-                tt.X = Math.Min(g.X, selectRegionMousePress.X);
-                selectRegion.Height = Math.Abs(pr.Y);
-                tt.Y = Math.Min(g.Y, selectRegionMousePress.Y);
-            }
+            selectRegion.Visibility = Visibility.Collapsed;
+            e.Handled = false;
         }
-
         private void selectRegion_MouseUp(object sender, MouseButtonEventArgs e)
         {
             //selectRegion.Visibility = System.Windows.Visibility.Collapsed;
             var rec = sender as Rectangle;
             rec.Visibility = System.Windows.Visibility.Collapsed;
         }
-
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
 
         }
-
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
             graphs.Add(new Graph { HeaderName = textBox_nameDiag.Text });
@@ -488,12 +466,10 @@ namespace Lab5
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
             graph.HeaderName = textBox_nameDiag.Text;
-            //Не изменяется имя графа
             textBox_nameDiag.SelectAll();
             textBox_nameDiag.Focus();
             Grid_create.Visibility = Visibility.Collapsed;
         }
-
         private void StackPanel_MouseDown(object sender, MouseButtonEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
@@ -508,7 +484,6 @@ namespace Lab5
                 }
             }
         }
-
         //private void Size_Changer_MouseDown(object sender, MouseButtonEventArgs e)
         //{
         //    bool r = false;
@@ -538,23 +513,26 @@ namespace Lab5
         //    }
         //    e.Handled = false;
         //}
-
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            selectRegion.Visibility = Visibility.Collapsed;
         }
-
         private void border_node_MouseEnter(object sender, MouseEventArgs e)
         {
-            var el = (sender as Border).DataContext as Node;
-            el.ResizeModOn();
-            SizeNode = (sender as Border);
+            if (selectRegion.Visibility == Visibility.Collapsed)
+            {
+                var el = (sender as Border).DataContext as Node;
+                el.ResizeModOn();
+                SizeNode = (sender as Border);
+            }
         }
-
         private void Canvas_MouseLeave(object sender, MouseEventArgs e)
         {
-            var el = SizeNode.DataContext as Node;
-            el.ResizeModOff();
+            if (selectRegion.Visibility == Visibility.Collapsed)
+            {
+                var el = SizeNode.DataContext as Node;
+                el.ResizeModOff();
+            }
         }
         private void Rectangle_MouseMove_bot(Object sender, MouseEventArgs e)
         {
@@ -600,12 +578,106 @@ namespace Lab5
             (sender as Rectangle).ReleaseMouseCapture();
         }
 
-        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        private void AddMethod_Item_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new AddMethodDialog();
             if (dlg.ShowDialog() == true)
             {
                 (SizeNode.DataContext as Node).AddMethod(dlg.metod);
+            }
+        }
+
+        private void sel_off_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            //var sel = (sender as Grid);
+            //var sel_ic = sel.Parent as Grid;
+            //var select_hide = sel_ic.FindName("selectRegion") as Rectangle;
+            //select_hide.Visibility = Visibility.Collapsed;
+        }
+
+        private void Grid_MouseMove(object sender, MouseEventArgs e)
+        {
+            Vector f = new Vector(4, 24);
+            Vector pd = new Vector(2, 0);
+            var grid = sender as Grid;
+            var g = e.GetPosition(grid);
+            //var selectRegion = grid.FindName("selectRegion") as Rectangle;
+            //var tt = selectRegion.RenderTransform as TranslateTransform;
+            var pr = (g - selectRegionMousePress);
+
+            if (e.LeftButton == MouseButtonState.Pressed)
+            {
+                if (Keyboard.Modifiers != ModifierKeys.Shift && Keyboard.Modifiers != ModifierKeys.Alt)
+                {
+                    selectRegion.Width = Math.Abs(pr.X - pd.X) ;
+                    double f_typeX = f.X;
+                    tt.X = Math.Min(g.X, selectRegionMousePress.X)+f_typeX;
+                    selectRegion.Height = Math.Abs(pr.Y);
+                    double f_type = f.Y;
+                    tt.Y = Math.Min(g.Y, selectRegionMousePress.Y) + f_type;
+
+
+                    var sel = graph.Nodes.Where(x => x.Pos != null).ToArray();
+
+                    for (i = 0; i < sel.Length; i++)
+                    {
+                        if (sel[i].Center.X < selectRegionMousePress.X
+                            && sel[i].Center.Y < selectRegionMousePress.Y
+                            && sel[i].Center.X > g.X
+                            && sel[i].Center.Y > g.Y
+                            || sel[i].Center.X > selectRegionMousePress.X
+                            && sel[i].Center.Y > selectRegionMousePress.Y
+                            && sel[i].Center.X < g.X
+                            && sel[i].Center.Y < g.Y
+                            || sel[i].Center.X > selectRegionMousePress.X
+                            && sel[i].Center.Y < selectRegionMousePress.Y
+                            && sel[i].Center.X < g.X
+                            && sel[i].Center.Y > g.Y
+                            || sel[i].Center.X > selectRegionMousePress.X
+                            && sel[i].Center.Y < selectRegionMousePress.Y
+                            && sel[i].Center.X < g.X
+                            && sel[i].Center.Y > g.Y
+                            || sel[i].Center.X < selectRegionMousePress.X
+                            && sel[i].Center.Y > selectRegionMousePress.Y
+                            && sel[i].Center.X > g.X
+                            && sel[i].Center.Y < g.Y
+                            || sel[i].Center.X < selectRegionMousePress.X
+                            && sel[i].Center.Y > selectRegionMousePress.Y
+                            && sel[i].Center.X > g.X
+                            && sel[i].Center.Y < g.Y)
+                        {
+                            sel[i].Select();
+                        }
+                        else
+                        {
+                            sel[i].UnSelect();
+                        }
+                    }
+
+                    x_e.Text = Convert.ToString(selectRegionMousePress.X);
+                    y_e.Text = Convert.ToString(selectRegionMousePress.Y);
+                    x_txt.Text = Convert.ToString(g.X);
+                    y_txt.Text = Convert.ToString(g.Y);
+                    
+                    selectRegion.Visibility = System.Windows.Visibility.Visible;
+                    
+                }
+            }
+        }
+
+        private void tbx_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            selectRegion.Visibility = Visibility.Collapsed;
+        }
+
+        private void EditClassName_Item_Click(object sender, RoutedEventArgs e)
+        {
+            var ed_class_dlg = new Edit_class_name();
+            if (ed_class_dlg.ShowDialog() == true)
+            {
+                ed_class_dlg.TXT_DIALOG.SelectAll();
+                ed_class_dlg.TXT_DIALOG.Focus();
+                (SizeNode.DataContext as Node).Text = ed_class_dlg.name;
             }
         }
     }

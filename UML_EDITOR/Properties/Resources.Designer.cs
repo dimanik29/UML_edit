@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace UML_EDITOR.Properties
+namespace Lab5.Properties
 {
 
 

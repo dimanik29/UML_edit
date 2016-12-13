@@ -1,0 +1,18 @@
+﻿<Window x:Class="Lab5.Edit_class_name"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Lab5"
+        mc:Ignorable="d"
+        Title="Имя Класса" Height="160" Width="260" ResizeMode="NoResize">
+    <Grid>
+        <Label Content="Введите имя класса:" FontSize="13" Margin="20,0,0,0" FontWeight="DemiBold"/>
+        <Grid Margin="0,30,0,0">
+            <StackPanel>
+                <TextBox x:Name="TXT_DIALOG" Width="200" Height="34" FontSize="21" Text="Имя класса" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Top" Margin="20,0,20,20" />
+                <Button Content="OK" Click="Button_Click" Width="64" Height="20" HorizontalAlignment="Right" Margin="0,0,22,0" Background="#FF9AF3EB" BorderBrush="#FFA896A7" Foreground="#FF535353"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
