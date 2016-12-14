@@ -78,11 +78,15 @@ namespace Lab5
             }
         }
         //Point dig_edge = new Point(10,10);
-
+        
         double mousePath;
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            if (e.RightButton == MouseButtonState.Pressed)
+            {
+                curNode = (sender as Border).DataContext as Node;
 
+            }
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var border = sender as Border;
@@ -583,8 +587,7 @@ namespace Lab5
             var dlg = new AddMethodDialog();
             if (dlg.ShowDialog() == true)
             {
-                (SizeNode.DataContext as Node).AddMethod(dlg.metod);
-
+                (SizeNode.DataContext as Node).AddMethod(dlg.result);
             }
         }
 
@@ -674,29 +677,12 @@ namespace Lab5
         private void EditClassName_Item_Click(object sender, RoutedEventArgs e)
         {
             var ed_class_dlg = new Edit_class_name();
+            ed_class_dlg.SetNode(curNode);
             if (ed_class_dlg.ShowDialog() == true)
             {
-                (SizeNode.DataContext as Node).Text = ed_class_dlg.name;
-                if (ed_class_dlg.stereotype == "entity")
-                {
-                    (SizeNode.DataContext as Node).StereotypeVis(1);
-                }
-                else if (ed_class_dlg.stereotype == "interface")
-                {
-                    (SizeNode.DataContext as Node).StereotypeVis(2);
-                }
-                else if (ed_class_dlg.stereotype == "control")
-                {
-                    (SizeNode.DataContext as Node).StereotypeVis(3);
-                }
-                else if (ed_class_dlg.stereotype == "boundary")
-                {
-                    (SizeNode.DataContext as Node).StereotypeVis(4);
-                }
-                else
-                {
-                    (SizeNode.DataContext as Node).StereotypeVis(5);
-                }
+                curNode.Text = ed_class_dlg.name;
+                curNode.stereotype_index = ed_class_dlg.ster;
+                curNode.StereotypeVis();
             }
         }
 
@@ -706,6 +692,16 @@ namespace Lab5
             if (var_add_dlg.ShowDialog() == true)
             {
                 (SizeNode.DataContext as Node).AddVariable(var_add_dlg.variable);
+            }
+        }
+
+        private void EditMethods_Click(object sender, RoutedEventArgs e)
+        {
+            var edit_dlg = new EditMethodDialogs();
+            edit_dlg.SetMethods(curNode);
+            if (edit_dlg.ShowDialog() == true)
+            {
+                curNode.metods = edit_dlg.Metods;
             }
         }
     }

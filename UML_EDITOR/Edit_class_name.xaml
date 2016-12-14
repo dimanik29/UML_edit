@@ -13,11 +13,10 @@
                 <TextBox x:Name="TXT_DIALOG" Width="200" Height="20" FontSize="14" Text="Имя класса" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Top" Margin="20,0,20,20" />
                 <TextBlock FontWeight="DemiBold" Margin="20,-14,0,10" Text="Укажите стереотип"/>
                 <ComboBox SelectionChanged="stereotype_comboBox_SelectionChanged" HorizontalAlignment="Left" Margin="24,0,0,0" Width="198" x:Name="stereotype_comboBox" Height="23">
-                    <ComboBoxItem IsSelected="True">
-                        <TextBlock Text="entity"/>
-                    </ComboBoxItem>
-                    <TextBlock Text="boundary"/>
+                    <TextBlock Text="null"/>
+                    <TextBlock Text="entity"/>
                     <TextBlock Text="control"/>
+                    <TextBlock Text="boundary"/>
                     <TextBlock Text="interface"/>
                     <TextBlock Text="actor"/>
                     <TextBlock Text="auxiliary"/>

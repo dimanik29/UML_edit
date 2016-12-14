@@ -132,17 +132,45 @@ namespace Lab5
         }
     }
 
-    class Node : ViewModelBase,INotifyPropertyChanged
+    public class Method
     {
+        public List<string> lst_s { get { return dict_Method.Values.ToList(); } }
+        public string access { get; set; }
+        public string beautiful_access { get { return dict_Method[access]; } }
+        public string name { get; set; }
+        public string variables { get; set; }
+        public Dictionary<string, string> dict_Method = new Dictionary<string, string> { { "+ ", "Public" }, { "- ", "Private" }, { "# ", "Protected" }, { "/ ", "Derived" }, { "~ ", "Package" } };
+        public void SetAccess(string str)
+        {
+            if (!dict_Method.ContainsValue(str))
+                return;
+            access = dict_Method.FirstOrDefault(x => x.Value == str).Key;
+        }
+        public override string ToString()
+        {
+            return (access + name + "(" + variables + ")");
+        }
+    }
+
+    public class Node : ViewModelBase, INotifyPropertyChanged
+    {
+        public int stereotype_index;
+        const int stereotype_length = 4;
         public Node()
         {
             SizeMode = Visibility.Hidden;
-            metods = new StringBuilder();
+            metods = new List<Method>();
             variables = new StringBuilder();
-            VisMode_stereotype_interface = Visibility.Collapsed;
-            VisMode_stereotype_control = Visibility.Collapsed;
-            VisMode_stereotype_boundary = Visibility.Collapsed;
-            VisMode_stereotype_entity = Visibility.Collapsed;
+            _vis_stereotype = new Visibility[stereotype_length];
+            for (int i = 0; i < stereotype_length; i++)
+            {
+                _vis_stereotype[i] = Visibility.Collapsed;
+            }
+            //VisMode_stereotype_interface = Visibility.Collapsed;
+            //VisMode_stereotype_control = Visibility.Collapsed;
+            //VisMode_stereotype_boundary = Visibility.Collapsed;
+            //VisMode_stereotype_entity = Visibility.Collapsed;
+
         }
         public void AddVariable(string f)
         {
@@ -150,10 +178,10 @@ namespace Lab5
             variables.Append(Environment.NewLine);
             Fire(nameof(Variables));
         }
-        public void AddMethod(string f)
+        public void AddMethod(Method f)
         {
-            metods.Append(f);
-            metods.Append(Environment.NewLine);
+            metods.Add(f);
+            //metods.Append(Environment.NewLine);
             Fire(nameof(Metods));
         }
         private StringBuilder variables;
@@ -161,10 +189,19 @@ namespace Lab5
         {
             get { return variables.ToString(); }
         }
-        private StringBuilder metods;
+        public List<Method> metods;
+        private string metods_str()
+        {
+            string res = "";
+            foreach (var item in metods)
+            {
+                res += item + Environment.NewLine;
+            }
+            return res;
+        }
         public string Metods
         {
-            get { return metods.ToString(); }
+            get { return metods_str(); }
         }
         //public event PropertyChangedEventHandler PropertyChanged;
         string _Text;
@@ -173,78 +210,42 @@ namespace Lab5
             get { return _Text; }
             set { Set(ref _Text, value); }
         }
-        
+
 
         public Point Pos { get; set; }   //  узла на Canvas, нужна только для View
         public Point Bot { get { return new Point(Pos.X + (int)Width / 2, Height + Pos.Y); } }
-        public Point Center { get { return new Point(Pos.X + (int)Width / 2, Pos.Y + (int)Height/2  ); } }
+        public Point Center { get { return new Point(Pos.X + (int)Width / 2, Pos.Y + (int)Height / 2); } }
         public Point Right { get { return new Point(Pos.X + Width, (int)Height / 2 + Pos.Y); } }
-        public Point Right_Bot { get { return new Point((Pos.X + Width)-1, (Height + Pos.Y)-1); } }
-        public Point Top_Centr { get { return new Point((Pos.X), Pos.Y - (Height/2)-18); } }
+        public Point Right_Bot { get { return new Point((Pos.X + Width) - 1, (Height + Pos.Y) - 1); } }
+        public Point Top_Centr { get { return new Point((Pos.X), Pos.Y - (Height / 2) - 18); } }
 
         public Visibility SizeMode { get; set; }
-        public Visibility VisMode_stereotype_interface { get; set; }
-        public Visibility VisMode_stereotype_control { get; set; }
-        public Visibility VisMode_stereotype_boundary { get; set; }
-        public Visibility VisMode_stereotype_entity { get; set; }
+
+        public Visibility VisMode_stereotype_interface { get { return _vis_stereotype[0]; } }
+        public Visibility VisMode_stereotype_control { get { return _vis_stereotype[1]; } }
+        public Visibility VisMode_stereotype_boundary { get { return _vis_stereotype[2]; } }
+        public Visibility VisMode_stereotype_entity { get { return _vis_stereotype[3]; } }
+
+        private Visibility[] _vis_stereotype;
 
         public void StereotypeVis(int f)
         {
-            switch (f)
+            for (int i = 0; i < stereotype_length; i++)
             {
-                case 1:
-                    VisMode_stereotype_interface = Visibility.Collapsed;
-                    VisMode_stereotype_control = Visibility.Collapsed;
-                    VisMode_stereotype_boundary = Visibility.Collapsed;
-                    VisMode_stereotype_entity = Visibility.Visible;
-                    Fire(nameof(VisMode_stereotype_boundary));
-                    Fire(nameof(VisMode_stereotype_control));
-                    Fire(nameof(VisMode_stereotype_entity));
-                    Fire(nameof(VisMode_stereotype_interface));
-                    break;
-                case 2:
-                    VisMode_stereotype_interface = Visibility.Visible;
-                    VisMode_stereotype_control = Visibility.Collapsed;
-                    VisMode_stereotype_boundary = Visibility.Collapsed;
-                    VisMode_stereotype_entity = Visibility.Collapsed;
-                    Fire(nameof(VisMode_stereotype_boundary));
-                    Fire(nameof(VisMode_stereotype_control));
-                    Fire(nameof(VisMode_stereotype_entity));
-                    Fire(nameof(VisMode_stereotype_interface));
-                    break;
-                case 3:
-                    VisMode_stereotype_interface = Visibility.Collapsed;
-                    VisMode_stereotype_control = Visibility.Visible;
-                    VisMode_stereotype_boundary = Visibility.Collapsed;
-                    VisMode_stereotype_entity = Visibility.Collapsed;
-                    Fire(nameof(VisMode_stereotype_boundary));
-                    Fire(nameof(VisMode_stereotype_control));
-                    Fire(nameof(VisMode_stereotype_entity));
-                    Fire(nameof(VisMode_stereotype_interface));
-                    break;
-                case 4:
-                    VisMode_stereotype_interface = Visibility.Collapsed;
-                    VisMode_stereotype_control = Visibility.Collapsed;
-                    VisMode_stereotype_boundary = Visibility.Visible;
-                    VisMode_stereotype_entity = Visibility.Collapsed;
-                    Fire(nameof(VisMode_stereotype_boundary));
-                    Fire(nameof(VisMode_stereotype_control));
-                    Fire(nameof(VisMode_stereotype_entity));
-                    Fire(nameof(VisMode_stereotype_interface));
-                    break;
-                case 5:
-                    VisMode_stereotype_interface = Visibility.Collapsed;
-                    VisMode_stereotype_control = Visibility.Collapsed;
-                    VisMode_stereotype_boundary = Visibility.Collapsed;
-                    VisMode_stereotype_entity = Visibility.Collapsed;
-                    Fire(nameof(VisMode_stereotype_boundary));
-                    Fire(nameof(VisMode_stereotype_control));
-                    Fire(nameof(VisMode_stereotype_entity));
-                    Fire(nameof(VisMode_stereotype_interface));
-                    break;
+                _vis_stereotype[i] = Visibility.Collapsed;
             }
-            //VisMode_stereotype = Visibility.Visible;
-            //Fire(nameof(VisMode_stereotype));
+            if (f<stereotype_length && f>=0)
+            {
+                _vis_stereotype[f] = Visibility.Visible;
+            }
+            Fire(nameof(VisMode_stereotype_boundary));
+            Fire(nameof(VisMode_stereotype_control));
+            Fire(nameof(VisMode_stereotype_entity));
+            Fire(nameof(VisMode_stereotype_interface));
+        }
+        public void StereotypeVis()
+        {
+            StereotypeVis(stereotype_index-1);
         }
 
         public double Width { get; set; }
@@ -254,7 +255,6 @@ namespace Lab5
         {
             SizeMode = Visibility.Visible;
             Fire("SizeMode");
-            //Pch?.Invoke(this, new PropertyChangedEventArgs(nameof(SizeMode)));
         }
         public void ResizeModOff()
         {
@@ -264,9 +264,9 @@ namespace Lab5
         public void Resize(double w, double h)
         {
             if (w > 50 && w < 203)
-            Width = w;
-            if(h>50)
-            Height = h;
+                Width = w;
+            if (h > 50)
+                Height = h;
             Fire("Width");
             Fire("Height");
             FireAnchors();

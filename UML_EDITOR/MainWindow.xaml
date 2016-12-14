@@ -78,11 +78,17 @@
                                         <Grid.ContextMenu>
                                             <ContextMenu>
                                                 <MenuItem Header="Edit class" Click="EditClassName_Item_Click"/>
+                                                <Separator/>
                                                 <MenuItem Header="Add Method" Click="AddMethod_Item_Click"/>
+                                                <MenuItem Header="Edit Method" Click="EditMethods_Click"/>
+                                                <Separator/>
                                                 <MenuItem Header="Add Variable" Click="AddVariable_click">
+                                                    
                                                     <!--<MenuItem Header="item2"/>
                                                     <Separator/>-->
                                                 </MenuItem>
+                                                <MenuItem Header="Add Variable" Click="AddVariable_click"/>
+                                                <MenuItem Header="Add Variable" Click="AddVariable_click"/>
                                             </ContextMenu>
                                         </Grid.ContextMenu>
                                         <Rectangle Fill="#0fff" x:Name="Select_Rectangle" Visibility="{Binding SizeMode}" Stroke="Purple" StrokeThickness="2" StrokeDashArray="1 2" Height="{Binding Height}" Width="{Binding Width}">
@@ -164,12 +170,12 @@
                                                 <TranslateTransform X="{Binding Top_Centr.X}" Y="{Binding Top_Centr.Y}"/>
                                             </Image.RenderTransform>
                                         </Image>
-                                        <Image Source="icons\boundary.png" Width="25" Margin="10,0,0,0" Height="25" Visibility="{Binding VisMode_stereotype_boundary}">
+                                        <Image Source="icons\boundary.png" Width="35" Margin="10,0,0,0" Height="35" Visibility="{Binding VisMode_stereotype_boundary}">
                                             <Image.RenderTransform>
                                                 <TranslateTransform X="{Binding Top_Centr.X}" Y="{Binding Top_Centr.Y}"/>
                                             </Image.RenderTransform>
                                         </Image>
-                                        <Image Source="icons\control.png" Width="25" Margin="10,0,0,0" Height="25" Visibility="{Binding VisMode_stereotype_control}">
+                                        <Image Source="icons\control.png" Width="35" Margin="10,0,0,0" Height="35" Visibility="{Binding VisMode_stereotype_control}">
                                             <Image.RenderTransform>
                                                 <TranslateTransform X="{Binding Top_Centr.X}" Y="{Binding Top_Centr.Y}"/>
                                             </Image.RenderTransform>

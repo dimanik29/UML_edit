@@ -22,6 +22,7 @@ namespace Lab5
         public string parametr;
         public string type;
         public string metod;
+        public Method result = new Method();
         public AddMethodDialog()
         {
             InitializeComponent();
@@ -31,7 +32,9 @@ namespace Lab5
         {
             DialogResult = true;
             parametr = TXT_SCOBE.Text;
-            metod = type + TXT_DIALOG.Text +"(" + parametr + ")";
+            result.access = type;
+            result.name = TXT_DIALOG.Text;
+            result.variables = TXT_SCOBE.Text;
         }
 
         private void RadioButton_public(object sender, RoutedEventArgs e)
