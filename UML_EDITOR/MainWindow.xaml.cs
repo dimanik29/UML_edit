@@ -31,11 +31,8 @@ namespace Lab5
             graph.Nodes.Add(node1);
             var node2 = new Node { Pos = new Point(200, 200), Text = "Class 2", Width = 100, Height = 40 };
             graph.Nodes.Add(node2);
-
-
-
-            var edge1 = new Edge { start = new Point(300, 300), finish = new Point(400, 400) };
-            graph.Edges.Add(edge1);
+            
+            graph.createEdge(node1,node2);
 
             //DataContext = graph;
         }
@@ -124,12 +121,11 @@ namespace Lab5
 
                             if (edge != null)
                             {
-                                graph.Edges.Remove(edge);
+                                graph.delEdge(edge);
                             }
                             else
                             {
-                                edge = new Edge { A = nodes[0], B = nodes[1], Dash = graph.edge_Dash };
-                                graph.Edges.Add(edge);
+                                graph.createEdge(nodes[0], nodes[1]);
                             }
                             nodes[0].InvSelect();
                             nodes[1].InvSelect();
@@ -582,14 +578,7 @@ namespace Lab5
             (sender as Rectangle).ReleaseMouseCapture();
         }
 
-        private void AddMethod_Item_Click(object sender, RoutedEventArgs e)
-        {
-            var dlg = new AddMethodDialog();
-            if (dlg.ShowDialog() == true)
-            {
-                (SizeNode.DataContext as Node).AddMethod(dlg.result);
-            }
-        }
+
 
         private void sel_off_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -674,6 +663,15 @@ namespace Lab5
             selectRegion.Visibility = Visibility.Collapsed;
         }
 
+        private void AddMethod_Item_Click(object sender, RoutedEventArgs e)
+        {
+            var dlg = new AddMethodDialog();
+            if (dlg.ShowDialog() == true)
+            {
+                (SizeNode.DataContext as Node).AddMethod(dlg.result);
+            }
+        }
+
         private void EditClassName_Item_Click(object sender, RoutedEventArgs e)
         {
             var ed_class_dlg = new Edit_class_name();
@@ -691,7 +689,7 @@ namespace Lab5
             var var_add_dlg = new AddVariable();
             if (var_add_dlg.ShowDialog() == true)
             {
-                (SizeNode.DataContext as Node).AddVariable(var_add_dlg.variable);
+                (SizeNode.DataContext as Node).AddVariable(var_add_dlg.result);
             }
         }
 
@@ -701,7 +699,17 @@ namespace Lab5
             edit_dlg.SetMethods(curNode);
             if (edit_dlg.ShowDialog() == true)
             {
-                curNode.metods = edit_dlg.Metods;
+                curNode.SetMethods(edit_dlg.Metods);
+            }
+        }
+
+        private void EditVariables_click(object sender, RoutedEventArgs e)
+        {
+            var edit_variables_dlg = new EditVariableDialog();
+            edit_variables_dlg.SetVariables(curNode);
+            if (edit_variables_dlg.ShowDialog() == true)
+            {
+                curNode.SetVariables(edit_variables_dlg.Variables);
             }
         }
     }

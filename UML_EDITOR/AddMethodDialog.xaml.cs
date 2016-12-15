@@ -31,7 +31,6 @@ namespace Lab5
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
-            parametr = TXT_SCOBE.Text;
             result.access = type;
             result.name = TXT_DIALOG.Text;
             result.variables = TXT_SCOBE.Text;

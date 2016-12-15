@@ -66,6 +66,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="EditVariableDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Edit_class_name.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -86,6 +90,9 @@
     </Compile>
     <Compile Include="EditMethodDialogs.xaml.cs">
       <DependentUpon>EditMethodDialogs.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="EditVariableDialog.xaml.cs">
+      <DependentUpon>EditVariableDialog.xaml</DependentUpon>
     </Compile>
     <Compile Include="Edit_class_name.xaml.cs">
       <DependentUpon>Edit_class_name.xaml</DependentUpon>

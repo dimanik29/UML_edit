@@ -87,8 +87,8 @@
                                                     <!--<MenuItem Header="item2"/>
                                                     <Separator/>-->
                                                 </MenuItem>
-                                                <MenuItem Header="Add Variable" Click="AddVariable_click"/>
-                                                <MenuItem Header="Add Variable" Click="AddVariable_click"/>
+                                                <MenuItem Header="Edit Variable" Click="EditVariables_click"/>
+                                                <Separator/>
                                             </ContextMenu>
                                         </Grid.ContextMenu>
                                         <Rectangle Fill="#0fff" x:Name="Select_Rectangle" Visibility="{Binding SizeMode}" Stroke="Purple" StrokeThickness="2" StrokeDashArray="1 2" Height="{Binding Height}" Width="{Binding Width}">
@@ -194,7 +194,7 @@
                         <ItemsControl ItemsSource="{Binding Edges}" ItemsPanel="{StaticResource cnv}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Line X1="{Binding A.Center.X}" Y1="{Binding A.Center.Y}" X2="{Binding B.Center.X}" Y2="{Binding B.Center.Y}" 
+                                    <Line X1="{Binding start.X}" Y1="{Binding start.Y}" X2="{Binding finish.X}" Y2="{Binding finish.Y}" 
                       Stroke="Green" StrokeThickness="10" MouseDown="Line_MouseDown" Loaded="Line_Loaded" StrokeDashArray="{Binding Dash}">
                                         <Line.BitmapEffect>
                                             <DropShadowBitmapEffect Opacity="{Binding ShadowOpacity}"/>

@@ -5,21 +5,24 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab5"
         mc:Ignorable="d"
-        Title="Имя переменной" Height="208" Width="397">
+        Title="Имя переменной" Height="210" Width="397">
     <Grid>
         <Label Content="Введите имя переменной:" Margin="20,0,0,0" FontWeight="DemiBold"/>
         <Grid Margin="0,30,0,0">
-            <Button Content="OK" Click="Button_Click" Width="90" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="0,0,0,30" Background="#FFF3F799" BorderBrush="#FFCD7711" Foreground="#FF253242" RenderTransformOrigin="0.5,0.5"/>
-            <TextBox x:Name="TXT_DIALOG" Width="200" Height="25" FontSize="16" Text="VariableName" TextAlignment="Center" VerticalAlignment="Top" Margin="20,0,20,20"/>
-            <Border BorderBrush="Wheat" BorderThickness="3" Height="29" Width="380" Margin="0,-30,0,0">
-                <StackPanel Orientation="Horizontal" Height="20" HorizontalAlignment="Center">
-                    <RadioButton Margin="9,0,0,0" Content="Public" Checked="RadioButton_public" IsChecked="True" VerticalAlignment="Center"/>
-                    <RadioButton Margin="9,0,0,0" Content="Private" Checked="RadioButton_private" VerticalAlignment="Center"/>
-                    <RadioButton Margin="9,0,0,0" Content="Protected" Checked="RadioButton_protected" VerticalAlignment="Center"/>
-                    <RadioButton Margin="9,0,0,0" Content="Derived" Checked="RadioButton_derived" VerticalAlignment="Center"/>
-                    <RadioButton Margin="9,0,0,0" Content="Package" Checked="RadioButton_package" VerticalAlignment="Center"/>
-                </StackPanel>
-            </Border>
+            <StackPanel>
+                <TextBox x:Name="TXT_DIALOG" Width="200" Height="25" FontSize="16" Text="VariableName" TextAlignment="Center" VerticalAlignment="Top" Margin="0"/>
+                <TextBox x:Name="TXT_SCOBE" Width="200" Height="25" FontSize="16" Text="Type of var" TextAlignment="Center" VerticalAlignment="Top" Margin="8"/>
+                <Border BorderBrush="Wheat" BorderThickness="3" Height="29" Width="380" Margin="5">
+                    <StackPanel Orientation="Horizontal" Height="20" HorizontalAlignment="Center">
+                        <RadioButton Margin="9,0,0,0" Content="Public" Checked="RadioButton_public" IsChecked="True" VerticalAlignment="Center"/>
+                        <RadioButton Margin="9,0,0,0" Content="Private" Checked="RadioButton_private" VerticalAlignment="Center"/>
+                        <RadioButton Margin="9,0,0,0" Content="Protected" Checked="RadioButton_protected" VerticalAlignment="Center"/>
+                        <RadioButton Margin="9,0,0,0" Content="Derived" Checked="RadioButton_derived" VerticalAlignment="Center"/>
+                        <RadioButton Margin="9,0,0,0" Content="Package" Checked="RadioButton_package" VerticalAlignment="Center"/>
+                    </StackPanel>
+                </Border>
+                <Button Content="OK" Click="Button_Click" Width="90" Height="30" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="5" Background="#FFF3F799" BorderBrush="#FFCD7711" Foreground="#FF253242" RenderTransformOrigin="0.5,0.5"/>
+            </StackPanel>
         </Grid>
     </Grid>
 </Window>

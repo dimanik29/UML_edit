@@ -21,6 +21,8 @@ namespace Lab5
     {
         public string type;
         public string variable;
+
+        public Variable result = new Variable();
         public AddVariable()
         {
             InitializeComponent();
@@ -28,7 +30,9 @@ namespace Lab5
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
-            variable = type + TXT_DIALOG.Text;
+            result.access = type;
+            result.name = TXT_DIALOG.Text;
+            result.tip = TXT_SCOBE.Text;
         }
 
         private void RadioButton_public(object sender, RoutedEventArgs e)

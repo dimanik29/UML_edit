@@ -66,13 +66,20 @@ namespace Lab5
         {
 
         }
-        //public string HeaderName { get { return "UML 1"; } }
-        //string _Text;
-        //public string Text  // полезные данные, характеризующие узел
-        //{
-        //    get { return _Text; }
-        //    set { Set(ref _Text, value, "Text"); }
-        //}
+        public void createEdge(Node a, Node b)
+        {
+            var t = new Edge();
+            t.SetNode(a, b);
+            Edges.Add(t);
+            a.linqs.Add(t);
+            b.linqs.Add(t);
+        }
+        public void delEdge(Edge e)
+        {
+            e.A.linqs.Remove(e);
+            e.B.linqs.Remove(e);
+            Edges.Remove(e);
+        }
         string hedee;
         public string HeaderName
         {
@@ -136,7 +143,7 @@ namespace Lab5
     {
         public List<string> lst_s { get { return dict_Method.Values.ToList(); } }
         public string access { get; set; }
-        public string beautiful_access { get { return dict_Method[access]; } }
+        public string beautiful_access { get { return dict_Method[access]; } set { SetAccess(value); } }
         public string name { get; set; }
         public string variables { get; set; }
         public Dictionary<string, string> dict_Method = new Dictionary<string, string> { { "+ ", "Public" }, { "- ", "Private" }, { "# ", "Protected" }, { "/ ", "Derived" }, { "~ ", "Package" } };
@@ -151,6 +158,25 @@ namespace Lab5
             return (access + name + "(" + variables + ")");
         }
     }
+    public class Variable
+    {
+        public List<string> lst_s_var { get { return dict_Variable.Values.ToList(); } }
+        public string access { get; set; }
+        public string beautiful_access_var { get { return dict_Variable[access]; } set { SetAccess(value); } }
+        public string name { get; set; }
+        public string tip { get; set; }
+        public Dictionary<string, string> dict_Variable = new Dictionary<string, string> { { "+ ", "Public" }, { "- ", "Private" }, { "# ", "Protected" }, { "/ ", "Derived" }, { "~ ", "Package" } };
+        public void SetAccess(string str)
+        {
+            if (!dict_Variable.ContainsValue(str))
+                return;
+            access = dict_Variable.FirstOrDefault(x => x.Value == str).Key;
+        }
+        public override string ToString()
+        {
+            return (access + name + " : " + tip);
+        }
+    }
 
     public class Node : ViewModelBase, INotifyPropertyChanged
     {
@@ -160,34 +186,56 @@ namespace Lab5
         {
             SizeMode = Visibility.Hidden;
             metods = new List<Method>();
-            variables = new StringBuilder();
+            variables = new List<Variable>();
             _vis_stereotype = new Visibility[stereotype_length];
             for (int i = 0; i < stereotype_length; i++)
             {
                 _vis_stereotype[i] = Visibility.Collapsed;
             }
-            //VisMode_stereotype_interface = Visibility.Collapsed;
-            //VisMode_stereotype_control = Visibility.Collapsed;
-            //VisMode_stereotype_boundary = Visibility.Collapsed;
-            //VisMode_stereotype_entity = Visibility.Collapsed;
-
+            linqs = new List<Edge>();
         }
-        public void AddVariable(string f)
+        public void SetMethods(List<Method> lm)
         {
-            variables.Append(f);
-            variables.Append(Environment.NewLine);
+            metods = lm;
+            Fire(nameof(Metods));
+        }
+        public void SetVariables(List<Variable> lv)
+        {
+            variables = lv;
             Fire(nameof(Variables));
         }
+        /// <summary>
+        /// Начало кластера изменения переменных
+        /// </summary>
+        /// <param name="f"> входная строка</param> 
+        public void AddVariable(Variable f)
+        {
+            variables.Add(f);
+            Fire(nameof(Variables));
+        }
+        public List<Variable> variables;
+        private string variables_str()
+        {
+            string res = "";
+            foreach (var item in variables)
+            {
+                res += item + Environment.NewLine;
+            }
+            return res;
+        }
+        public string Variables
+        {
+            get { return variables_str(); }
+        }
+        /// <summary>
+        /// Начало кластера изменения методов
+        /// </summary>
+        /// <param name="f">да это строка входная</param>
         public void AddMethod(Method f)
         {
             metods.Add(f);
             //metods.Append(Environment.NewLine);
             Fire(nameof(Metods));
-        }
-        private StringBuilder variables;
-        public string Variables
-        {
-            get { return variables.ToString(); }
         }
         public List<Method> metods;
         private string metods_str()
@@ -203,7 +251,6 @@ namespace Lab5
         {
             get { return metods_str(); }
         }
-        //public event PropertyChangedEventHandler PropertyChanged;
         string _Text;
         public string Text  // полезные данные, характеризующие узел
         {
@@ -217,7 +264,9 @@ namespace Lab5
         public Point Center { get { return new Point(Pos.X + (int)Width / 2, Pos.Y + (int)Height / 2); } }
         public Point Right { get { return new Point(Pos.X + Width, (int)Height / 2 + Pos.Y); } }
         public Point Right_Bot { get { return new Point((Pos.X + Width) - 1, (Height + Pos.Y) - 1); } }
-        public Point Top_Centr { get { return new Point((Pos.X), Pos.Y - (Height / 2) - 18); } }
+        public Point Top_Centr { get { return new Point((Pos.X), Pos.Y - (int)(Height / 2) - 18); } }
+        public Point Left { get { return new Point(Pos.X, (int)Height / 2 + Pos.Y); } }
+        public Point Top { get { return new Point(Pos.X + (int)Width/2, Pos.Y); } }
 
         public Visibility SizeMode { get; set; }
 
@@ -306,7 +355,12 @@ namespace Lab5
             Pos += vector;
             Fire("Pos");
             FireAnchors();
+            foreach (var item in linqs)
+            {
+                item.calcReplace();
+            }
         }
+        public List<Edge> linqs;
         bool editMode = false;
         public bool EditMode
         {
@@ -331,7 +385,7 @@ namespace Lab5
         }
     }
 
-    class Edge : ViewModelBase
+    public class Edge : ViewModelBase
     {
         public string Dash { get; set; }
         // public Point Pos { get; set; }
@@ -340,6 +394,51 @@ namespace Lab5
         public Point start { get; set; }
         public Point finish { get; set; }
         //public int ShadowOpacity_edge { get; set; }
+        private bool Direction;
+        public void InvDirection()
+        {
+            Direction = !Direction;
+            calcReplace();
+        }
+        public void calcReplace()
+        {
+            bool dx = A.Pos.X - B.Pos.X > 0;
+            bool dy = A.Pos.Y - B.Pos.Y > 0;
+
+            if (dx)
+            {
+                start = A.Left;
+            }
+            else
+            {
+                start = A.Right;  
+            }
+            if (dy)
+            {
+                finish = B.Bot;
+            }
+            else
+            {
+                finish = B.Top;
+            }
+            if (!Direction)
+            {
+                var e = finish;
+                finish = start;
+                start = e;
+            }
+            Fire(nameof(start));
+            Fire(nameof(finish));
+        }
+        public void SetNode(Node from, Node to)
+        {
+            A = from;
+            B = to;
+            //start = from.Pos;
+            //finish = to.Pos;
+            Direction = true;
+            calcReplace();
+        }
         bool selected_edge;
         public bool Selected { get { return selected_edge; } }
         public int ShadowOpacity { get { return selected_edge ? 1 : 0; } }

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -16,28 +15,29 @@ using System.Windows.Shapes;
 namespace Lab5
 {
     /// <summary>
-    /// Логика взаимодействия для EditMethodDialogs.xaml
+    /// Логика взаимодействия для EditVariableDialog.xaml
     /// </summary>
-    public partial class EditMethodDialogs : Window
+    public partial class EditVariableDialog : Window
     {
-        public List<Method> Metods = new List<Method>();
-        public EditMethodDialogs()
+        public List<Variable> Variables = new List<Variable>();
+
+        public EditVariableDialog()
         {
             InitializeComponent();
         }
 
-        private void ButtonOk_Click(object sender, RoutedEventArgs e)
+        private void Button_Click(object sender, RoutedEventArgs e)
         {
             DialogResult = true;
-            Metods = lst_V.Items.Cast<Method>().ToList();
+            Variables = lst_V.Items.Cast<Variable>().ToList();
         }
-        public void SetMethods(Node n)
+        public void SetVariables(Node n)
         {
-            foreach (var item in n.metods)
+            foreach (var item in n.variables)
             {
                 lst_V.Items.Add(item);
             }
-            Metods = n.metods;
+            Variables = n.variables;
         }
     }
 }
