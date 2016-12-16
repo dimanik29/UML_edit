@@ -25,7 +25,7 @@
             <Button Content=" New_tab " Height="40" Width="80" Click="Button_newTab"/>
             <Grid Height="40" Width="80" x:Name="Grid_create" Visibility="Collapsed">
                 <StackPanel Orientation="Vertical">
-                    <TextBox x:Name="textBox_nameDiag" Height="19" Width="80" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="Имя введи"
+                    <TextBox x:Name="textBox_nameDiag" Height="19" Width="80" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="Name"
                       HorizontalAlignment="Center" FontSize="10" SpellCheck.IsEnabled="True"/>
                     <Button x:Name="CreateButton" Content=" Create " Height="21" Width="80" Click="CreateButton_Click" Visibility="Visible"/>
                     <Button x:Name="EditButton" Content=" Edit " Height="21" Width="80" Click="EditButton_Click" Visibility="Collapsed"/>
@@ -83,7 +83,6 @@
                                                 <MenuItem Header="Edit Method" Click="EditMethods_Click"/>
                                                 <Separator/>
                                                 <MenuItem Header="Add Variable" Click="AddVariable_click">
-                                                    
                                                     <!--<MenuItem Header="item2"/>
                                                     <Separator/>-->
                                                 </MenuItem>
@@ -118,10 +117,8 @@
                                                 <StackPanel>
 
                                                 </StackPanel>
-                                                <Grid x:Name="sel_off" HorizontalAlignment="Center" Grid.Row="0" VerticalAlignment="Top" MouseDown="sel_off_MouseDown">
+                                                <Grid x:Name="sel_off" HorizontalAlignment="Center" Grid.Row="0" VerticalAlignment="Top">
                                                     <StackPanel>
-                                                        <!--<TextBox x:Name="tbx" VerticalAlignment="Top" TextWrapping="Wrap" BorderBrush="Transparent" Background="Transparent" Focusable="True"
-                           Text="{Binding Text, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="16" Margin="8,0,8,0" Visibility="{Binding EditModeVisibility}"/>-->
                                                         <TextBlock Text="{Binding Text}" FontSize="16" VerticalAlignment="Top" HorizontalAlignment="Center" Margin="8,0,8,0" Visibility="{Binding ViewModeVisibility}"/>
                                                         <Line X1="0" Y1="0" X2="200" Y2="0" Stroke="Black" StrokeThickness="3"/>
                                                     </StackPanel>
@@ -135,7 +132,7 @@
                                         </Border>
                                         <Canvas Visibility="{Binding SizeMode}">
                                             <Border BorderBrush="Gray" BorderThickness="2">
-                                                <Rectangle Fill="Wheat" Height="5" Width="5"
+                                                <Rectangle Fill="Wheat" Height="8" Width="8"
                                                    MouseMove="Rectangle_MouseMove_bot"
                                                    MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
                                                 <Border.RenderTransform>
@@ -145,7 +142,7 @@
                                                 </Border.RenderTransform>
                                             </Border>
                                             <Border BorderBrush="Gray" BorderThickness="2">
-                                                <Rectangle Fill="Wheat" Height="5" Width="5"
+                                                <Rectangle Fill="Wheat" Height="8" Width="8"
                                                    MouseMove="Rectangle_MouseMove_right"
                                                    MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
                                                 <Border.RenderTransform>
@@ -155,7 +152,7 @@
                                                 </Border.RenderTransform>
                                             </Border>
                                             <Border BorderBrush="Gray" BorderThickness="2">
-                                                <Rectangle Fill="Wheat" Height="5" Width="5"
+                                                <Rectangle Fill="Wheat" Height="8" Width="8"
                                                    MouseMove="Rectangle_MouseMove_right_bot"
                                                    MouseLeftButtonUp="Rectangle_MouseLeftButtonUp"/>
                                                 <Border.RenderTransform>
@@ -194,24 +191,23 @@
                         <ItemsControl ItemsSource="{Binding Edges}" ItemsPanel="{StaticResource cnv}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Line X1="{Binding start.X}" Y1="{Binding start.Y}" X2="{Binding finish.X}" Y2="{Binding finish.Y}" 
-                      Stroke="Green" StrokeThickness="10" MouseDown="Line_MouseDown" Loaded="Line_Loaded" StrokeDashArray="{Binding Dash}">
-                                        <Line.BitmapEffect>
-                                            <DropShadowBitmapEffect Opacity="{Binding ShadowOpacity}"/>
-                                        </Line.BitmapEffect>
-                                    </Line>
-                                    <!--<Line X1="{Binding A.Pos.X}" Y1="{Binding A.Pos.Y}" X2="{Binding B.Pos.X}" Y2="{Binding B.Pos.Y}" 
-                      Stroke="Green" StrokeThickness="2"/>-->
+                                    <Grid>
+                                        <Line X1="{Binding start.X}" Y1="{Binding start.Y}" X2="{Binding finish.X}" Y2="{Binding finish.Y}" StrokeDashCap="Round"
+                                            Stroke="Green" StrokeThickness="3" MouseDown="Line_MouseDown" Loaded="Line_Loaded" StrokeDashArray="{Binding Dash}">
+                                            <Line.BitmapEffect>
+                                                <DropShadowBitmapEffect Opacity="{Binding ShadowOpacity}"/>
+                                            </Line.BitmapEffect>
+                                        </Line>
+                                        <Line X1="{Binding X3}" Y1="{Binding Y3}" MouseDown="Line_MouseDown"
+                                              X2="{Binding X5}" Y2="{Binding Y5}"
+                                              Stroke="Black" StrokeThickness="5" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                        <Line X1="{Binding X3}" Y1="{Binding Y3}" MouseDown="Line_MouseDown"
+                                              X2="{Binding X6}" Y2="{Binding Y6}"
+                                              Stroke="Black" StrokeThickness="5" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                    </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-
-                        <Line x:Name="ghost_line" Visibility="Collapsed" Stroke="Red" StrokeThickness="2">
-                            <!--<Line.RenderTransform>
-                                <TranslateTransform x:Name="tt_ghostline"/>
-                            </Line.RenderTransform>-->
-                        </Line>
-
                     </Grid>
                 </DataTemplate>
             </TabControl.ContentTemplate>

@@ -68,7 +68,7 @@ namespace Lab5
         }
         public void createEdge(Node a, Node b)
         {
-            var t = new Edge();
+            var t = new Edge() { Dash = edge_Dash };
             t.SetNode(a, b);
             Edges.Add(t);
             a.linqs.Add(t);
@@ -113,10 +113,8 @@ namespace Lab5
             var lines = System.IO.File.ReadAllLines(@"Data.txt");
 
             var countNode = int.Parse(lines[0].Split('\t')[0]);
-            //var countCorner = int.Parse(lines[0].Split('\t')[2]);
             for (int i = 1; i <= countNode; i++)
             {
-
                 Nodes.Add(Node.Parse(lines[i]));
             }
             for (int i = countNode + 1; i < lines.Length; i++)
@@ -234,7 +232,6 @@ namespace Lab5
         public void AddMethod(Method f)
         {
             metods.Add(f);
-            //metods.Append(Environment.NewLine);
             Fire(nameof(Metods));
         }
         public List<Method> metods;
@@ -319,16 +316,25 @@ namespace Lab5
             Fire("Width");
             Fire("Height");
             FireAnchors();
+            foreach (var item in linqs)
+            {
+                item.calcReplace();
+                item.calcArrow();
+            }
         }
 
         public void FireAnchors()
         {
-            //PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Left)));
             Fire("Right");
             Fire("Bot");
-            Fire(nameof(Right_Bot));//test
+            Fire(nameof(Right_Bot));
             Fire(nameof(Center));
             Fire(nameof(Top_Centr));
+            foreach (var item in linqs)
+            {
+                item.calcReplace();
+                item.calcArrow();
+            }
         }
 
         bool selected;
@@ -358,20 +364,21 @@ namespace Lab5
             foreach (var item in linqs)
             {
                 item.calcReplace();
+                item.calcArrow();
             }
         }
         public List<Edge> linqs;
-        bool editMode = false;
-        public bool EditMode
-        {
-            get { return editMode; }
-            set
-            {
-                Set(ref editMode, value, "EditModeVisibility", "ViewModeVisibility");
-            }
-        }
-        public Visibility EditModeVisibility { get { return EditMode ? Visibility.Visible : Visibility.Collapsed; } }
-        public Visibility ViewModeVisibility { get { return !EditMode ? Visibility.Visible : Visibility.Collapsed; } }
+        //bool editMode = false;
+        //public bool EditMode
+        //{
+        //    get { return editMode; }
+        //    set
+        //    {
+        //        Set(ref editMode, value, "EditModeVisibility", "ViewModeVisibility");
+        //    }
+        //}
+        //public Visibility EditModeVisibility { get { return EditMode ? Visibility.Visible : Visibility.Collapsed; } }
+        //public Visibility ViewModeVisibility { get { return !EditMode ? Visibility.Visible : Visibility.Collapsed; } }
 
         public override string ToString()
         {
@@ -388,17 +395,56 @@ namespace Lab5
     public class Edge : ViewModelBase
     {
         public string Dash { get; set; }
-        // public Point Pos { get; set; }
+        //private string dash = "3 3";
+        public double X3 {get;set;}
+        public double Y3 {get;set;}
+        public double X5 {get;set;}
+        public double Y5 {get;set;}
+        public double X6 {get;set;}
+        public double Y6 { get; set; }
         public Node A { get; set; }
         public Node B { get; set; }
         public Point start { get; set; }
         public Point finish { get; set; }
-        //public int ShadowOpacity_edge { get; set; }
         private bool Direction;
         public void InvDirection()
         {
             Direction = !Direction;
             calcReplace();
+            calcArrow();
+        }
+        public void calcArrow()
+        {
+            //centr
+            X3 = (start.X + finish.X) / 2;
+            Y3 = (start.Y + finish.Y) / 2;
+
+            // Length of edge
+            double d = Math.Sqrt(Math.Pow((finish.X - start.X), 2) + Math.Pow((finish.Y - start.Y), 2));
+
+            //vector coords
+            double X = finish.X - start.X;
+            double Y = finish.Y - start.Y;
+
+            //coords of point center+10px
+            double X4 = X3 - (X / d) * 16;
+            double Y4 = Y3 - (Y / d) * 16;
+
+            //Line ur
+            double Xp = finish.Y - start.Y;
+            double Yp = start.X - finish.X;
+
+            // координаты перпендикуляров, удалённой от точки X4;Y4 на 5px в разные стороны
+            X5 = X4 + (Xp / d) * 5;
+            Y5 = Y4 + (Yp / d) * 5;
+            X6 = X4 - (Xp / d) * 5;
+            Y6 = Y4 - (Yp / d) * 5;
+            Fire(nameof(X3));
+            Fire(nameof(X5));
+            Fire(nameof(X6));
+            Fire(nameof(Y3));
+            Fire(nameof(Y5));
+            Fire(nameof(Y6));
         }
         public void calcReplace()
         {

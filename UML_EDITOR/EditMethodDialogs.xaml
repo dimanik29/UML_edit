@@ -6,38 +6,40 @@
         xmlns:local="clr-namespace:Lab5"
         xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="EditMethodDialogs" Height="300" Width="375">
+        Title="EditMethodDialogs" Height="300" Width="404">
     <Grid>
-        <ListView x:Name="lst_V">
-            <ListView.View>
-                <GridView>
-                    <GridViewColumn Header="Доступ" Width="120">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <ComboBox ItemsSource="{Binding lst_s}" SelectedItem="{Binding beautiful_access}"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Имя" Width="120" >
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding name}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" MinWidth="100"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                    <GridViewColumn Header="Атрибуты" Width="120">
-                        <GridViewColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBox Text="{Binding variables}" Width="100" MinWidth="100"/>
-                            </DataTemplate>
-                        </GridViewColumn.CellTemplate>
-                    </GridViewColumn>
-                </GridView>
-            </ListView.View>
-        </ListView>
-        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Bottom">
-            <Button Content="Ok" Width="100"  Height="40" Margin="5" Click="ButtonOk_Click"/>
-            <Button Content="Cancel" Width="100"  Height="40" Margin="5"/>
+        <StackPanel>
+            <ListView x:Name="lst_V" Height="230">
+                <ListView.View>
+                    <GridView>
+                        <GridViewColumn Header="Доступ" Width="120">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <ComboBox ItemsSource="{Binding lst_s}" SelectedItem="{Binding beautiful_access}"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Имя" Width="120" >
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding name}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" MinWidth="100"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                        <GridViewColumn Header="Атрибуты" Width="120">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBox Text="{Binding variables}" Width="100" MinWidth="100"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Bottom">
+                <Button Content="Ok" Width="60"  Height="20" Margin="5" Click="ButtonOk_Click"/>
+                <Button Content="Cancel" Width="60"  Height="20" Margin="5"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>

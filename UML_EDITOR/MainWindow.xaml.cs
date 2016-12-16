@@ -20,7 +20,7 @@ namespace Lab5
 
         public MainWindow()
         {
-            graphs.Add(new Graph());
+            graphs.Add(new Graph() {HeaderName = "newGraph" });
 
             InitializeComponent();
 
@@ -33,8 +33,7 @@ namespace Lab5
             graph.Nodes.Add(node2);
             
             graph.createEdge(node1,node2);
-
-            //DataContext = graph;
+            
         }
 
         private void Line_Loaded(Object sender, RoutedEventArgs e)
@@ -67,14 +66,13 @@ namespace Lab5
                         {
                             _curNode.InvSelect();
                         }
-                        _curNode.EditMode = false;
+                        //_curNode.EditMode = false;
                     }
 
                     _curNode = value;
                 }
             }
         }
-        //Point dig_edge = new Point(10,10);
         
         double mousePath;
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
@@ -89,17 +87,12 @@ namespace Lab5
                 var border = sender as Border;
                 Width_n.Text = ("Width" + "\n" + border.ActualWidth);
                 Height_n.Text = ("Height" + "\n" + border.ActualHeight);
-                //var ic = border.Parent as ItemsControl;
                 var grid = (border.Parent as Grid);
                 var grid_par = grid.Parent as ItemsControl;
-                //var selectRegion = grid.FindName("selectRegion") as Rectangle;
 
                 if (e.ClickCount == 2)
                 {
-                    (border.DataContext as Node).EditMode = true;
-                    var tbx = border.FindName("tbx") as TextBox;
-                    //tbx.SelectAll();
-                    //tbx.Focus();
+                    //(border.DataContext as Node).EditMode = true;
                 }
                 else
                 {
@@ -131,6 +124,7 @@ namespace Lab5
                             nodes[1].InvSelect();
                         }
                         curNode = border.DataContext as Node;
+                        curNode.FireAnchors();
                         curNode.InvSelect();
                     }
                     else
@@ -144,7 +138,7 @@ namespace Lab5
         }
         private void Border_MouseMove(object sender, MouseEventArgs e)
         {
-            if (curNode != null && !curNode.EditMode && e.LeftButton == MouseButtonState.Pressed && Keyboard.Modifiers != ModifierKeys.Shift)
+            if (curNode != null && e.LeftButton == MouseButtonState.Pressed && Keyboard.Modifiers != ModifierKeys.Shift)//!curNode.EditMode
             {
                 var p = e.GetPosition(this);
                 var dr = p - mousePress;
@@ -192,11 +186,11 @@ namespace Lab5
 
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.Key == Key.F2 && curNode != null)
-            {
-                curNode.EditMode = true;
-            }
-            if (e.Key == Key.Delete)//&& curNode != null)
+            //if (e.Key == Key.F2 && curNode != null)
+            //{
+            //    curNode.EditMode = true;
+            //}
+            if (e.Key == Key.Delete)
             {
 
                 var del_edge = graph.Edges.Where(x => x.Selected).FirstOrDefault();
@@ -224,13 +218,6 @@ namespace Lab5
         {
             graph.Save();
         }
-        //private void Button_newWindow(object sender, RoutedEventArgs e)
-        //{
-        //    graph.Hedee = "Test";
-        //    var mw = new TableName_redact();
-        //    var res = mw.ShowDialog();
-        //    var rr = res;
-        //}
         private void Button_Load(object sender, RoutedEventArgs e)
         {
             graph.Load();
@@ -247,7 +234,6 @@ namespace Lab5
             CreateButton.Visibility = Visibility.Visible;
             textBox_nameDiag.SelectAll();
             textBox_nameDiag.Focus();
-            // graphs.Add(new Graph{ Hedee = "322"});
         }
         private void ItemsControl_MouseMove(object sender, MouseEventArgs e)
         {
@@ -432,12 +418,22 @@ namespace Lab5
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var line = sender as Line;
-                (line.DataContext as Edge).InvSelect();
+                var t = (line.DataContext as Edge);
+                t.InvSelect();
+                if (e.LeftButton == MouseButtonState.Pressed)
+                {
+                    if(e.ClickCount == 2)
+                    {
+                        t.InvDirection();
+
+                    }
+                }
+                selectRegion.Visibility = Visibility.Collapsed;
             }
         }
         private void Line_Anchor_Checked(object sender, RoutedEventArgs e)
         {
-            graph.edge_Dash = "2 0.3";
+            graph.edge_Dash = "3 3";
         }
         private void Line_Equal_Checked(object sender, RoutedEventArgs e)
         {
@@ -484,35 +480,6 @@ namespace Lab5
                 }
             }
         }
-        //private void Size_Changer_MouseDown(object sender, MouseButtonEventArgs e)
-        //{
-        //    bool r = false;
-        //    //Size_Changer.Fill = new SolidColorBrush(Colors.DarkTurquoise);
-        //    var sel = sender as Rectangle;
-        //    var grid = (sel.Parent as Grid);
-        //    var Size_Changer = grid.FindName("Size_Changer") as Rectangle;
-        //    var tt_Size_Changer = Size_Changer.RenderTransform as TranslateTransform;
-        //    //var ghost_line = grid.FindName("ghost_line") as Line;
-        //    var g = e.GetPosition(grid);
-        //    var pr = g - selectRegionMousePress;
-        //    if (e.LeftButton == MouseButtonState.Pressed)
-        //    {
-
-        //        if (e.ClickCount == 2)
-        //        {
-        //            r = !r;
-        //        }
-        //        if (r == true)
-        //        {
-        //            Size_Changer.Fill = new SolidColorBrush(Colors.DarkTurquoise);
-        //        }
-        //        else
-        //        {
-        //            Size_Changer.Fill = new SolidColorBrush(Colors.Wheat);
-        //        }
-        //    }
-        //    e.Handled = false;
-        //}
         private void TextBlock_MouseDown(object sender, MouseButtonEventArgs e)
         {
             selectRegion.Visibility = Visibility.Collapsed;
@@ -578,24 +545,12 @@ namespace Lab5
             (sender as Rectangle).ReleaseMouseCapture();
         }
 
-
-
-        private void sel_off_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            //var sel = (sender as Grid);
-            //var sel_ic = sel.Parent as Grid;
-            //var select_hide = sel_ic.FindName("selectRegion") as Rectangle;
-            //select_hide.Visibility = Visibility.Collapsed;
-        }
-
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
             Vector f = new Vector(4, 24);
             Vector pd = new Vector(2, 0);
             var grid = sender as Grid;
             var g = e.GetPosition(grid);
-            //var selectRegion = grid.FindName("selectRegion") as Rectangle;
-            //var tt = selectRegion.RenderTransform as TranslateTransform;
             var pr = (g - selectRegionMousePress);
 
             if (e.LeftButton == MouseButtonState.Pressed)
