@@ -5,13 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab5"
         mc:Ignorable="d"
-        Title="Имя Класса" Height="190" Width="260" ResizeMode="NoResize">
+        Title="Имя Класса" Height="190" Width="260" ResizeMode="NoResize" Icon="icons\DialogsIcon.png">
     <Grid>
-        <Label Content="Введите имя класса:" FontSize="13" Margin="20,0,0,0" FontWeight="DemiBold"/>
+        <Label Content="Set class name:" FontSize="13" Margin="20,0,0,0" FontWeight="DemiBold"/>
         <Grid Margin="0,30,0,0">
             <StackPanel>
-                <TextBox x:Name="TXT_DIALOG" Width="200" Height="20" FontSize="14" Text="Имя класса" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Top" Margin="20,0,20,20" />
-                <TextBlock FontWeight="DemiBold" Margin="20,-14,0,10" Text="Укажите стереотип"/>
+                <TextBox x:Name="TXT_DIALOG" Width="200" Height="20" FontSize="14" Text="insert name" HorizontalAlignment="Center" TextAlignment="Center" VerticalAlignment="Top" Margin="20,0,20,20" />
+                <TextBlock FontWeight="DemiBold" Margin="20,-14,0,10" Text="Set stereotype"/>
                 <ComboBox SelectionChanged="stereotype_comboBox_SelectionChanged" HorizontalAlignment="Left" Margin="24,0,0,0" Width="198" x:Name="stereotype_comboBox" Height="23">
                     <TextBlock Text="null"/>
                     <TextBlock Text="entity"/>

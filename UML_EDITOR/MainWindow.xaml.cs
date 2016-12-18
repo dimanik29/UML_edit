@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -10,9 +11,6 @@ using System.Windows.Shapes;
 
 namespace Lab5
 {
-    /// <summary>
-    /// Логика взаимодействия для MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         ObservableCollection<Graph> graphs = new ObservableCollection<Graph>();
@@ -20,20 +18,11 @@ namespace Lab5
 
         public MainWindow()
         {
-            graphs.Add(new Graph() {HeaderName = "newGraph" });
-
+            graphs.Add(new Graph() {HeaderName = "First Graph" });
             InitializeComponent();
-
-
             tabControl1.ItemsSource = graphs;
-
-            var node1 = new Node { Pos = new Point(200, 100), Text = "Class 1", Width = 100, Height = 40 };
+            var node1 = new Node { Pos = new Point(this.Width / 2, this.Height/2), Text = "Hello World!", Width = 110, Height = 40, };
             graph.Nodes.Add(node1);
-            var node2 = new Node { Pos = new Point(200, 200), Text = "Class 2", Width = 100, Height = 40 };
-            graph.Nodes.Add(node2);
-            
-            graph.createEdge(node1,node2);
-            
         }
 
         private void Line_Loaded(Object sender, RoutedEventArgs e)
@@ -66,7 +55,6 @@ namespace Lab5
                         {
                             _curNode.InvSelect();
                         }
-                        //_curNode.EditMode = false;
                     }
 
                     _curNode = value;
@@ -85,55 +73,46 @@ namespace Lab5
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var border = sender as Border;
-                Width_n.Text = ("Width" + "\n" + border.ActualWidth);
-                Height_n.Text = ("Height" + "\n" + border.ActualHeight);
                 var grid = (border.Parent as Grid);
                 var grid_par = grid.Parent as ItemsControl;
+                
+                mousePress = e.GetPosition(this);
+                mousePath = 0;
 
-                if (e.ClickCount == 2)
+                border.CaptureMouse();  // захватим мышку, чтобы при движении не "отлипал" узел
+                if (Keyboard.Modifiers == ModifierKeys.Shift)
                 {
-                    //(border.DataContext as Node).EditMode = true;
+                    (border.DataContext as Node).InvSelect();
+
+                    var nodes = graph.Nodes.Where(x => x.Selected).ToArray();
+                    if (nodes.Length == 2)
+                    {
+                        var edge = graph.Edges
+                            .Where(x => x.A == nodes[0] && x.B == nodes[1]
+                                    || x.A == nodes[1] && x.B == nodes[0])
+                            .FirstOrDefault();
+
+                        if (edge != null)
+                        {
+                            graph.delEdge(edge);
+                        }
+                        else
+                        {
+                            graph.createEdge(nodes[0], nodes[1]);
+                        }
+                        nodes[0].InvSelect();
+                        nodes[1].InvSelect();
+                    }
+                    curNode = border.DataContext as Node;
+                    curNode.FireAnchors();
+                    curNode.InvSelect();
                 }
                 else
                 {
-                    mousePress = e.GetPosition(this);
-                    mousePath = 0;
-
-                    border.CaptureMouse();  // захватим мышку, чтобы при движении не "отлипал" узел
-                    if (Keyboard.Modifiers == ModifierKeys.Shift)
-                    {
-                        (border.DataContext as Node).InvSelect();
-
-                        var nodes = graph.Nodes.Where(x => x.Selected).ToArray();
-                        if (nodes.Length == 2)
-                        {
-                            var edge = graph.Edges
-                              .Where(x => x.A == nodes[0] && x.B == nodes[1]
-                                       || x.A == nodes[1] && x.B == nodes[0])
-                              .FirstOrDefault();
-
-                            if (edge != null)
-                            {
-                                graph.delEdge(edge);
-                            }
-                            else
-                            {
-                                graph.createEdge(nodes[0], nodes[1]);
-                            }
-                            nodes[0].InvSelect();
-                            nodes[1].InvSelect();
-                        }
-                        curNode = border.DataContext as Node;
-                        curNode.FireAnchors();
-                        curNode.InvSelect();
-                    }
-                    else
-                    {
-                        selectRegion.Visibility = System.Windows.Visibility.Collapsed;
-                        curNode = border.DataContext as Node;
-                    }
+                    selectRegion.Visibility = System.Windows.Visibility.Collapsed;
+                    curNode = border.DataContext as Node;
                 }
-                e.Handled = true;
+            e.Handled = true;
             }
         }
         private void Border_MouseMove(object sender, MouseEventArgs e)
@@ -149,7 +128,6 @@ namespace Lab5
             }
 
         }
-
         private void Border_MouseUp(object sender, MouseButtonEventArgs e)
         {
             if (mousePath < 5 && curNode != null && Keyboard.Modifiers != ModifierKeys.Shift)
@@ -183,13 +161,8 @@ namespace Lab5
                 }
             }
         }
-
         private void Window_KeyDown(object sender, KeyEventArgs e)
         {
-            //if (e.Key == Key.F2 && curNode != null)
-            //{
-            //    curNode.EditMode = true;
-            //}
             if (e.Key == Key.Delete)
             {
 
@@ -211,21 +184,52 @@ namespace Lab5
                         graph.Edges.Remove(item);
                     }
                 }
-
             }
         }
         private void Button_Save(object sender, RoutedEventArgs e)
         {
-            graph.Save();
+            Microsoft.Win32.SaveFileDialog dlg = new Microsoft.Win32.SaveFileDialog();
+            dlg.FileName = "Graph"; // Default file name
+            dlg.DefaultExt = ".dat"; // Default file extension
+            dlg.Filter = "Binary type format|*.dat"; // Filter files by extension
+
+            // Show save file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                string filename = dlg.FileName;
+                // Save document
+                using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
+                    {
+                        graphs[graphs.IndexOf(graph)].Save(fs);
+                    }
+            }
         }
         private void Button_Load(object sender, RoutedEventArgs e)
         {
-            graph.Load();
-        }
 
-        private void Button_New(object sender, RoutedEventArgs e)
-        {
-            graph.Clear();
+            Microsoft.Win32.OpenFileDialog dlg = new Microsoft.Win32.OpenFileDialog();
+            dlg.FileName = " "; // Default file name
+            dlg.DefaultExt = ".dat"; // Default file extension
+            dlg.Filter = "Binary type format|*.dat"; // Filter files by extension
+
+            // Show save file dialog box
+            Nullable<bool> result = dlg.ShowDialog();
+
+            // Process save file dialog box results
+            if (result == true)
+            {
+                string filename = dlg.FileName; // full path of file to string
+                // Save document
+                graphs.Add(new Graph());
+                using (FileStream fs = new FileStream(filename, FileMode.OpenOrCreate))
+                {
+                    graphs[graphs.Count - 1] = Graph.Load(fs);
+                }
+            }
+            tabControl1.SelectedItem = graphs[graphs.Count - 1];
         }
         private void Button_newTab(object sender, RoutedEventArgs e)
         {
@@ -240,141 +244,12 @@ namespace Lab5
 
             if (e.LeftButton == MouseButtonState.Pressed)
             {
-                // var g = e.GetPosition(sender as IInputElement);
-                //var pr = g - selectRegionMousePress;
                 var ic = sender as ItemsControl;
                 var grid = (ic.Parent as Grid);
-                //var selectRegion = grid.FindName("selectRegion") as Rectangle;
-                //var tt = selectRegion.RenderTransform as TranslateTransform;
                 var ghost_line = grid.FindName("ghost_line") as Line;
                 var g = e.GetPosition(grid);
                 var pr = g - selectRegionMousePress;
-
-
-
-                if (Keyboard.Modifiers != ModifierKeys.Shift && Keyboard.Modifiers != ModifierKeys.Alt)
-                {
-                    //selectRegion.Width = Math.Abs(pr.X);
-                    //tt.X = Math.Min(g.X, selectRegionMousePress.X);
-                    //selectRegion.Height = Math.Abs(pr.Y);
-                    //tt.Y = Math.Min(g.Y, selectRegionMousePress.Y);
-
-
-                    //var sel = graph.Nodes.Where(x => x.Pos != null).ToArray();
-
-                    //for (i = 0; i < sel.Length; i++)
-                    //{
-                    //    if (sel[i].Center.X < selectRegionMousePress.X
-                    //        && sel[i].Center.Y < selectRegionMousePress.Y
-                    //        && sel[i].Center.X > g.X
-                    //        && sel[i].Center.Y > g.Y
-                    //        || sel[i].Center.X > selectRegionMousePress.X
-                    //        && sel[i].Center.Y > selectRegionMousePress.Y
-                    //        && sel[i].Center.X < g.X
-                    //        && sel[i].Center.Y < g.Y
-                    //        || sel[i].Center.X > selectRegionMousePress.X
-                    //        && sel[i].Center.Y < selectRegionMousePress.Y
-                    //        && sel[i].Center.X < g.X
-                    //        && sel[i].Center.Y > g.Y
-                    //        || sel[i].Center.X > selectRegionMousePress.X
-                    //        && sel[i].Center.Y < selectRegionMousePress.Y
-                    //        && sel[i].Center.X < g.X
-                    //        && sel[i].Center.Y > g.Y
-                    //        || sel[i].Center.X < selectRegionMousePress.X
-                    //        && sel[i].Center.Y > selectRegionMousePress.Y
-                    //        && sel[i].Center.X > g.X
-                    //        && sel[i].Center.Y < g.Y
-                    //        || sel[i].Center.X < selectRegionMousePress.X
-                    //        && sel[i].Center.Y > selectRegionMousePress.Y
-                    //        && sel[i].Center.X > g.X
-                    //        && sel[i].Center.Y < g.Y)
-                    //    {
-                    //        sel[i].Select();
-                    //    }
-                    //    else
-                    //    {
-                    //        sel[i].UnSelect();
-                    //    }
-                    //}
-
-                    //var sel_edges = graph.Edges.Where(x => x.finish != null).ToArray();
-
-                    //for (int i = 0; i < sel_edges.Length; i++)
-                    //{
-                    //    if ((sel_edges[i].finish.X < selectRegionMousePress.X
-                    //        && sel_edges[i].finish.Y < selectRegionMousePress.Y
-                    //        && sel_edges[i].finish.X > g.X
-                    //        && sel_edges[i].finish.Y > g.Y
-                    //        || sel_edges[i].finish.X > selectRegionMousePress.X
-                    //        && sel_edges[i].finish.Y > selectRegionMousePress.Y
-                    //        && sel_edges[i].finish.X < g.X
-                    //        && sel_edges[i].finish.Y < g.Y
-                    //        || sel_edges[i].finish.X > selectRegionMousePress.X
-                    //        && sel_edges[i].finish.Y < selectRegionMousePress.Y
-                    //        && sel_edges[i].finish.X < g.X
-                    //        && sel_edges[i].finish.Y > g.Y
-                    //        || sel_edges[i].finish.X > selectRegionMousePress.X
-                    //        && sel_edges[i].finish.Y < selectRegionMousePress.Y
-                    //        && sel_edges[i].finish.X < g.X
-                    //        && sel_edges[i].finish.Y > g.Y
-                    //        || sel_edges[i].finish.X < selectRegionMousePress.X
-                    //        && sel_edges[i].finish.Y > selectRegionMousePress.Y
-                    //        && sel_edges[i].finish.X > g.X
-                    //        && sel_edges[i].finish.Y < g.Y
-                    //        || sel_edges[i].finish.X < selectRegionMousePress.X
-                    //        && sel_edges[i].finish.Y > selectRegionMousePress.Y
-                    //        && sel_edges[i].finish.X > g.X
-                    //        && sel_edges[i].finish.Y < g.Y)
-                    //        || (sel_edges[i].start.X < selectRegionMousePress.X
-                    //        && sel_edges[i].start.Y < selectRegionMousePress.Y
-                    //        && sel_edges[i].start.X > g.X
-                    //        && sel_edges[i].start.Y > g.Y
-                    //        || sel_edges[i].start.X > selectRegionMousePress.X
-                    //        && sel_edges[i].start.Y > selectRegionMousePress.Y
-                    //        && sel_edges[i].start.X < g.X
-                    //        && sel_edges[i].start.Y < g.Y
-                    //        || sel_edges[i].start.X > selectRegionMousePress.X
-                    //        && sel_edges[i].start.Y < selectRegionMousePress.Y
-                    //        && sel_edges[i].start.X < g.X
-                    //        && sel_edges[i].start.Y > g.Y
-                    //        || sel_edges[i].start.X > selectRegionMousePress.X
-                    //        && sel_edges[i].start.Y < selectRegionMousePress.Y
-                    //        && sel_edges[i].start.X < g.X
-                    //        && sel_edges[i].start.Y > g.Y
-                    //        || sel_edges[i].start.X < selectRegionMousePress.X
-                    //        && sel_edges[i].start.Y > selectRegionMousePress.Y
-                    //        && sel_edges[i].start.X > g.X
-                    //        && sel_edges[i].start.Y < g.Y
-                    //        || sel_edges[i].start.X < selectRegionMousePress.X
-                    //        && sel_edges[i].start.Y > selectRegionMousePress.Y
-                    //        && sel_edges[i].start.X > g.X
-                    //        && sel_edges[i].start.Y < g.Y))
-                    //    {
-                    //        sel_edges[i].Select();
-                    //    }
-                    //    else
-                    //    {
-                    //        sel_edges[i].UnSelect();
-                    //    }
-                    //}
-
-
-                    x_e.Text = Convert.ToString(selectRegionMousePress.X);
-                    y_e.Text = Convert.ToString(selectRegionMousePress.Y);
-                    x_txt.Text = Convert.ToString(g.X);
-                    y_txt.Text = Convert.ToString(g.Y);
-                    
-                    //selectRegion.Visibility = System.Windows.Visibility.Visible;
-
-                }
-                //else if (Keyboard.Modifiers == ModifierKeys.Alt)
-                //{
-                //    ghost_line.Visibility = System.Windows.Visibility.Visible;
-                //    ghost_line.X1 = selectRegionMousePress.X;
-                //    ghost_line.Y1 = selectRegionMousePress.Y;
-                //    ghost_line.X2 = g.X;
-                //    ghost_line.Y2 = g.Y;
-                //}
+                
             }
         }
         private void ItemsControl_MouseUp(object sender, MouseButtonEventArgs e)
@@ -425,19 +300,30 @@ namespace Lab5
                     if(e.ClickCount == 2)
                     {
                         t.InvDirection();
-
                     }
                 }
-                selectRegion.Visibility = Visibility.Collapsed;
             }
+            selectRegion.Visibility = Visibility.Collapsed;
         }
-        private void Line_Anchor_Checked(object sender, RoutedEventArgs e)
+        private void Dependency_Checked(object sender, RoutedEventArgs e)
         {
+            graph.edge_TriVis = Visibility.Collapsed;
             graph.edge_Dash = "3 3";
         }
-        private void Line_Equal_Checked(object sender, RoutedEventArgs e)
+        private void Association_Checked(object sender, RoutedEventArgs e)
         {
-            graph.edge_Dash = "1 0";
+            graph.edge_TriVis = Visibility.Collapsed;
+            graph.edge_Dash = "3 0";
+        }
+        private void implementation_Checked(object sender, RoutedEventArgs e)
+        {
+            graph.edge_TriVis = Visibility.Visible;
+            graph.edge_Dash = "3 3";
+        }
+        private void Inheritance_Checked(object sender, RoutedEventArgs e)
+        {
+            graph.edge_TriVis = Visibility.Visible;
+            graph.edge_Dash = "3 0";
         }
         private void selectRegion_MouseMove(object sender, MouseEventArgs e)
         {
@@ -446,18 +332,20 @@ namespace Lab5
         }
         private void selectRegion_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            //selectRegion.Visibility = System.Windows.Visibility.Collapsed;
+            selectRegion.Visibility = System.Windows.Visibility.Collapsed;
             var rec = sender as Rectangle;
             rec.Visibility = System.Windows.Visibility.Collapsed;
         }
         private void Image_MouseDown(object sender, MouseButtonEventArgs e)
         {
-
+            //TbcView.Items.RemoveAt(TbcView.SelectedIndex);
+            graphs.Remove(graph);
         }
         private void CreateButton_Click(object sender, RoutedEventArgs e)
         {
             graphs.Add(new Graph { HeaderName = textBox_nameDiag.Text });
             Grid_create.Visibility = Visibility.Collapsed;
+            tabControl1.SelectedItem = graphs[graphs.Count - 1];
         }
         private void EditButton_Click(object sender, RoutedEventArgs e)
         {
@@ -498,7 +386,10 @@ namespace Lab5
             if (selectRegion.Visibility == Visibility.Collapsed)
             {
                 var el = SizeNode.DataContext as Node;
-                el.ResizeModOff();
+                if (el != null)
+                {
+                    el.ResizeModOff();
+                }
             }
         }
         private void Rectangle_MouseMove_bot(Object sender, MouseEventArgs e)
@@ -544,7 +435,6 @@ namespace Lab5
         {
             (sender as Rectangle).ReleaseMouseCapture();
         }
-
         private void Grid_MouseMove(object sender, MouseEventArgs e)
         {
             Vector f = new Vector(4, 24);
@@ -601,23 +491,15 @@ namespace Lab5
                             sel[i].UnSelect();
                         }
                     }
-
-                    x_e.Text = Convert.ToString(selectRegionMousePress.X);
-                    y_e.Text = Convert.ToString(selectRegionMousePress.Y);
-                    x_txt.Text = Convert.ToString(g.X);
-                    y_txt.Text = Convert.ToString(g.Y);
-                    
                     selectRegion.Visibility = System.Windows.Visibility.Visible;
                     
                 }
             }
         }
-
         private void tbx_MouseDown(object sender, MouseButtonEventArgs e)
         {
             selectRegion.Visibility = Visibility.Collapsed;
         }
-
         private void AddMethod_Item_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new AddMethodDialog();
@@ -626,7 +508,6 @@ namespace Lab5
                 (SizeNode.DataContext as Node).AddMethod(dlg.result);
             }
         }
-
         private void EditClassName_Item_Click(object sender, RoutedEventArgs e)
         {
             var ed_class_dlg = new Edit_class_name();
@@ -638,7 +519,6 @@ namespace Lab5
                 curNode.StereotypeVis();
             }
         }
-
         private void AddVariable_click(object sender, RoutedEventArgs e)
         {
             var var_add_dlg = new AddVariable();
@@ -647,7 +527,6 @@ namespace Lab5
                 (SizeNode.DataContext as Node).AddVariable(var_add_dlg.result);
             }
         }
-
         private void EditMethods_Click(object sender, RoutedEventArgs e)
         {
             var edit_dlg = new EditMethodDialogs();
@@ -657,7 +536,6 @@ namespace Lab5
                 curNode.SetMethods(edit_dlg.Metods);
             }
         }
-
         private void EditVariables_click(object sender, RoutedEventArgs e)
         {
             var edit_variables_dlg = new EditVariableDialog();

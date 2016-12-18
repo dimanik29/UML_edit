@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Lab5"
         mc:Ignorable="d"
         KeyDown="Window_KeyDown"
-        Title="MainWindow" Height="550" Width="950" MouseUp="Window_MouseUp">
+        Title="Simple Uml Class Diagram Editor"  Height="550" Width="950" MouseUp="Window_MouseUp" Icon="icons\MainWindowIcon.png">
     <Window.Resources>
         <ItemsPanelTemplate x:Key="cnv">
             <Canvas/>
@@ -18,39 +18,30 @@
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left">
-            <Button Content=" New " Height="40" Width="80" Click="Button_New"/>
-            <Button Content=" Load " Height="40" Width="80" Click="Button_Load"/>
-            <Button Content=" Save " Height="40" Width="80" Click="Button_Save"/>
-            <Button Content=" New_tab " Height="40" Width="80" Click="Button_newTab"/>
-            <Grid Height="40" Width="80" x:Name="Grid_create" Visibility="Collapsed">
-                <StackPanel Orientation="Vertical">
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="6,0,0,0">
+            <Button Content=" New " Height="20" Width="60" Click="Button_newTab"/>
+            <Button Content=" Load " Height="20" Width="60" Click="Button_Load"/>
+            <Button Content=" Save " Height="20" Width="60" Click="Button_Save"/>
+            <Grid Height="40" Width="Auto" x:Name="Grid_create" Visibility="Collapsed">
+                <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="textBox_nameDiag" Height="19" Width="80" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="Name"
                       HorizontalAlignment="Center" FontSize="10" SpellCheck.IsEnabled="True"/>
                     <Button x:Name="CreateButton" Content=" Create " Height="21" Width="80" Click="CreateButton_Click" Visibility="Visible"/>
                     <Button x:Name="EditButton" Content=" Edit " Height="21" Width="80" Click="EditButton_Click" Visibility="Collapsed"/>
                 </StackPanel>
             </Grid>
-            <TextBlock Height="40" Width="80" x:Name="x_txt" TextAlignment="Center"/>
-            <TextBlock Height="40" Width="80" x:Name="y_txt" TextAlignment="Center"/>
-            <TextBlock Height="40" Width="80" x:Name="x_e" TextAlignment="Center"/>
-            <TextBlock Height="40" Width="80" x:Name="y_e" TextAlignment="Center"/>
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Type of node" Margin="2"/>
-                <RadioButton Margin="2" Content="Class" Checked="Square_Checked" IsChecked="True" VerticalAlignment="Center"/>
-                <RadioButton Margin="2" Content="Note" Checked="Oval_Checked" VerticalAlignment="Center"/>
-            </StackPanel>
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Type of Line" Margin="2"/>
-                <RadioButton Margin="2" x:Name="Line_Equal" Content="Equal" IsChecked="True"  VerticalAlignment="Center" Checked="Line_Equal_Checked"/>
-                <RadioButton Margin="2" x:Name="Line_Anchor" Content="Anchor" VerticalAlignment="Center" Checked="Line_Anchor_Checked"/>
-            </StackPanel>
-            <TextBlock Height="40" Width="80" x:Name="Width_n" TextAlignment="Center"/>
-            <TextBlock Height="40" Width="80" x:Name="Height_n" TextAlignment="Center"/>
-            <StackPanel Orientation="Vertical">
-                <TextBlock Text="Selecting" Margin="2"/>
-                <RadioButton Margin="2" x:Name="Size_off" Content="off" IsChecked="True" VerticalAlignment="Center"/>
-                <RadioButton Margin="2" x:Name="Size_on" Content="on" VerticalAlignment="Center"/>
+            <StackPanel Orientation="Horizontal" Margin="50,0,0,0">
+                <StackPanel>
+                    <TextBlock Text="Type of Line" Margin="2"/>
+                    <Grid>
+                        <StackPanel Orientation="Horizontal" Width="Auto">
+                            <RadioButton Margin="2" x:Name="Dependency" Content="Dependency" IsChecked="True"  VerticalAlignment="Center" Checked="Dependency_Checked"/>
+                            <RadioButton Margin="2" x:Name="Association" Content="Association" VerticalAlignment="Center" Checked="Association_Checked"/>
+                            <RadioButton Margin="2" x:Name="implementation" Content="Implementation" VerticalAlignment="Center" Checked="implementation_Checked"/>
+                            <RadioButton Margin="2" x:Name="Inheritance" Content="Inheritance" VerticalAlignment="Center" Checked="Inheritance_Checked"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
             </StackPanel>
         </StackPanel>
 
@@ -199,11 +190,14 @@
                                             </Line.BitmapEffect>
                                         </Line>
                                         <Line X1="{Binding X3}" Y1="{Binding Y3}" MouseDown="Line_MouseDown"
-                                              X2="{Binding X5}" Y2="{Binding Y5}"
-                                              Stroke="Black" StrokeThickness="5" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                              X2="{Binding X5}" Y2="{Binding Y5}" 
+                                              Stroke="Black" StrokeThickness="3" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
                                         <Line X1="{Binding X3}" Y1="{Binding Y3}" MouseDown="Line_MouseDown"
-                                              X2="{Binding X6}" Y2="{Binding Y6}"
-                                              Stroke="Black" StrokeThickness="5" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                              X2="{Binding X6}" Y2="{Binding Y6}" 
+                                              Stroke="Black" StrokeThickness="3" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                        <Line X1="{Binding X5}" Y1="{Binding Y5}" MouseDown="Line_MouseDown"
+                                              X2="{Binding X6}" Y2="{Binding Y6}" Visibility="{Binding arrowVis}"
+                                              Stroke="Black" StrokeThickness="3" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
                                     </Grid>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>

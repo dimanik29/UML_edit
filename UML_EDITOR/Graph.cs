@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,8 +13,10 @@ using System.Windows.Controls;
 
 namespace Lab5
 {
+    [Serializable]
     public class ViewModelBase : INotifyPropertyChanged
     {
+        [field:NonSerialized]
         public event PropertyChangedEventHandler PropertyChanged;
         protected void Set<T>(ref T field, T value, params string[] propNames)
         {
@@ -60,6 +64,7 @@ namespace Lab5
     }
 
 
+    [Serializable]
     class Graph : ViewModelBase
     {
         public Graph()
@@ -68,7 +73,7 @@ namespace Lab5
         }
         public void createEdge(Node a, Node b)
         {
-            var t = new Edge() { Dash = edge_Dash };
+            var t = new Edge() { Dash = edge_Dash, arrowVis = edge_TriVis };
             t.SetNode(a, b);
             Edges.Add(t);
             a.linqs.Add(t);
@@ -91,45 +96,22 @@ namespace Lab5
         public ObservableCollection<Node> Nodes { get { return nodes; } }
         public ObservableCollection<Edge> Edges { get { return edges; } }
 
-        public void Save()
+
+        public void Save(Stream stream)
         {
-            var sb = new StringBuilder();
-            sb.AppendLine("" + Nodes.Count + "\t" + Edges.Count);
-            foreach (var node in Nodes)
-            {
-                sb.AppendLine(node.ToString() + "\t" + "Corner = ");
-            }
-            foreach (var edge in Edges)
-            {
-                sb.AppendLine("" + Nodes.IndexOf(edge.A) + "\t" + Nodes.IndexOf(edge.B));
-            }
-            System.IO.File.WriteAllText(@"data.txt", sb.ToString());
+            BinaryFormatter formatter = new BinaryFormatter();
+            formatter.Serialize(stream, this);
+            stream.Close();
         }
 
-        public void Load()
-        {
-            Clear();
-
-            var lines = System.IO.File.ReadAllLines(@"Data.txt");
-
-            var countNode = int.Parse(lines[0].Split('\t')[0]);
-            for (int i = 1; i <= countNode; i++)
-            {
-                Nodes.Add(Node.Parse(lines[i]));
-            }
-            for (int i = countNode + 1; i < lines.Length; i++)
-            {
-                var f = lines[i].Split('\t').Select(x => int.Parse(x)).ToArray();
-                Edges.Add(new Edge { A = Nodes[f[0]], B = Nodes[f[1]] });
-            }
-        }
-
-        internal void Clear()
-        {
-            Nodes.Clear();
-            Edges.Clear();
+        public static Graph Load(Stream stre)
+        {            BinaryFormatter formatter = new BinaryFormatter();
+            var t = formatter.Deserialize(stre) as Graph;
+            stre.Close();
+            return t;
         }
         public string edge_Dash;
+        public Visibility edge_TriVis;
 
         public override string ToString()
         {
@@ -137,6 +119,7 @@ namespace Lab5
         }
     }
 
+    [Serializable]
     public class Method
     {
         public List<string> lst_s { get { return dict_Method.Values.ToList(); } }
@@ -156,6 +139,8 @@ namespace Lab5
             return (access + name + "(" + variables + ")");
         }
     }
+
+    [Serializable]
     public class Variable
     {
         public List<string> lst_s_var { get { return dict_Variable.Values.ToList(); } }
@@ -176,6 +161,7 @@ namespace Lab5
         }
     }
 
+    [Serializable]
     public class Node : ViewModelBase, INotifyPropertyChanged
     {
         public int stereotype_index;
@@ -305,7 +291,7 @@ namespace Lab5
         public void ResizeModOff()
         {
             SizeMode = Visibility.Hidden;
-            Fire("SizeMode");
+            Fire("SizeMode");   
         }
         public void Resize(double w, double h)
         {
@@ -368,18 +354,6 @@ namespace Lab5
             }
         }
         public List<Edge> linqs;
-        //bool editMode = false;
-        //public bool EditMode
-        //{
-        //    get { return editMode; }
-        //    set
-        //    {
-        //        Set(ref editMode, value, "EditModeVisibility", "ViewModeVisibility");
-        //    }
-        //}
-        //public Visibility EditModeVisibility { get { return EditMode ? Visibility.Visible : Visibility.Collapsed; } }
-        //public Visibility ViewModeVisibility { get { return !EditMode ? Visibility.Visible : Visibility.Collapsed; } }
-
         public override string ToString()
         {
             return Text + "\t" + Pos.X + "\t" + Pos.Y;
@@ -391,11 +365,11 @@ namespace Lab5
             return new Node { Text = f[0], Pos = new Point(double.Parse(f[1]), double.Parse(f[2])) };
         }
     }
-
+    [Serializable]
     public class Edge : ViewModelBase
     {
         public string Dash { get; set; }
-        //private string dash = "3 3";
+        public Visibility arrowVis { get; set; }
         public double X3 {get;set;}
         public double Y3 {get;set;}
         public double X5 {get;set;}
@@ -407,6 +381,7 @@ namespace Lab5
         public Point start { get; set; }
         public Point finish { get; set; }
         private bool Direction;
+        
         public void InvDirection()
         {
             Direction = !Direction;
@@ -415,6 +390,8 @@ namespace Lab5
         }
         public void calcArrow()
         {
+
+            
             //centr
             X3 = (start.X + finish.X) / 2;
             Y3 = (start.Y + finish.Y) / 2;
@@ -435,10 +412,10 @@ namespace Lab5
             double Yp = start.X - finish.X;
 
             // координаты перпендикуляров, удалённой от точки X4;Y4 на 5px в разные стороны
-            X5 = X4 + (Xp / d) * 5;
-            Y5 = Y4 + (Yp / d) * 5;
-            X6 = X4 - (Xp / d) * 5;
-            Y6 = Y4 - (Yp / d) * 5;
+            X5 = X4 + (Xp / d) * 7;
+            Y5 = Y4 + (Yp / d) * 7;
+            X6 = X4 - (Xp / d) * 7;
+            Y6 = Y4 - (Yp / d) * 7;
             Fire(nameof(X3));
             Fire(nameof(X5));
             Fire(nameof(X6));
@@ -480,8 +457,6 @@ namespace Lab5
         {
             A = from;
             B = to;
-            //start = from.Pos;
-            //finish = to.Pos;
             Direction = true;
             calcReplace();
         }

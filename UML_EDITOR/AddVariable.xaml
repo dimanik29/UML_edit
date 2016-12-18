@@ -5,9 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab5"
         mc:Ignorable="d"
-        Title="Имя переменной" Height="210" Width="397">
+        Title="Set name" Height="210" Width="410" Icon="icons\DialogsIcon.png">
     <Grid>
-        <Label Content="Введите имя переменной:" Margin="20,0,0,0" FontWeight="DemiBold"/>
+        <Label Content="Set name:" Margin="20,0,0,0" FontWeight="DemiBold"/>
         <Grid Margin="0,30,0,0">
             <StackPanel>
                 <TextBox x:Name="TXT_DIALOG" Width="200" Height="25" FontSize="16" Text="VariableName" TextAlignment="Center" VerticalAlignment="Top" Margin="0"/>

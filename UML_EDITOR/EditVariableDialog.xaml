@@ -6,27 +6,27 @@
         xmlns:local="clr-namespace:Lab5"
         xmlns:col="clr-namespace:System.Collections;assembly=mscorlib"
         mc:Ignorable="d"
-        Title="EditVarDialog" Height="300" Width="404">
+        Title="Edit Variables Dialog" Height="300" Width="404" Icon="icons\DialogsIcon.png">
     <Grid>
         <StackPanel>
             <ListView x:Name="lst_V" Height="230">
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Доступ" Width="120">
+                        <GridViewColumn Header="Access" Width="120">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <ComboBox ItemsSource="{Binding lst_s_var}" SelectedItem="{Binding beautiful_access_var}"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Имя" Width="120">
+                        <GridViewColumn Header="Name" Width="120">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox Text="{Binding name}" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="Auto" MinWidth="100"/>
                                 </DataTemplate>
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
-                        <GridViewColumn Header="Тип" Width="120">
+                        <GridViewColumn Header="Type" Width="120">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBox Text="{Binding tip}" Width="100" MinWidth="100"/>
@@ -37,9 +37,8 @@
                 </ListView.View>
             </ListView>
         <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" VerticalAlignment="Bottom">
-            <Button Content="Ok" Width="60"  Height="20" Margin="5" Click="Button_Click"/>
-            <Button Content="Cancel" Width="60"  Height="20" Margin="5"/>
-        </StackPanel>
+                <Button Content="Ok" Width="60"  Height="20" Margin="5" Click="Button_Click"/>
+            </StackPanel>
         </StackPanel>
     </Grid>
 </Window>
