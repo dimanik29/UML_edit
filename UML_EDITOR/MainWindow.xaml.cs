@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Shapes;
 
 namespace Lab5
@@ -61,7 +59,7 @@ namespace Lab5
                 }
             }
         }
-        
+
         double mousePath;
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -140,12 +138,13 @@ namespace Lab5
         Point selectRegionMousePress;
         private void ItemsControl_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            var p = e.GetPosition(sender as IInputElement);
+            mousePress = p;
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 if (Keyboard.Modifiers == ModifierKeys.Shift)
                 {
-                    var p = e.GetPosition(sender as IInputElement);
-                    mousePress = p;
+                    
                     if (curNode != null && curNode.Selected)
                         curNode.InvSelect();
                     curNode = new Node { Pos = p, Text = "Class " + (graph.Nodes.Count() + 1), Width = 100, Height = 100 };
@@ -254,39 +253,11 @@ namespace Lab5
         }
         private void ItemsControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            var ic = sender as ItemsControl;
-            var grid = (ic.Parent as Grid);
-            var c = grid.Children;
-            ///var selectRegion = grid.FindName("selectRegion") as Rectangle;
-            //var ghost_line = grid.FindName("ghost_line") as Line;
-
-            //var tt = selectRegion.FindName("tt") as TranslateTransform;
-
-            var g = e.GetPosition(ic);
             selectRegion.Visibility = System.Windows.Visibility.Collapsed;
-
-            //ghost_line.Visibility = System.Windows.Visibility.Collapsed;
-            //if (Keyboard.Modifiers == ModifierKeys.Alt)
-            //{
-            //    var edge = new Edge { start = selectRegionMousePress, finish = g };
-            //    graph.Edges.Add(edge);
-            //}
         }
         private void Window_MouseUp(object sender, MouseButtonEventArgs e)
         {
-            var win = sender as Window;
-            //var grid = (win.Parent as Grid);
-            //var selectRegion = win.FindName("selectRegion") as Rectangle;
-
-            //selectRegion.Visibility = System.Windows.Visibility.Collapsed;
-        }
-        private void Square_Checked(object sender, RoutedEventArgs e)
-        {
-            //graph.Radius = 0;
-        }
-        private void Oval_Checked(object sender, RoutedEventArgs e)
-        {
-            //graph.Radius = 100;
+            selectRegion.Visibility = Visibility.Collapsed;
         }
         private void Line_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -295,13 +266,11 @@ namespace Lab5
                 var line = sender as Line;
                 var t = (line.DataContext as Edge);
                 t.InvSelect();
-                if (e.LeftButton == MouseButtonState.Pressed)
+                if(e.ClickCount == 2)
                 {
-                    if(e.ClickCount == 2)
-                    {
-                        t.InvDirection();
-                    }
+                    t.InvDirection();
                 }
+                
             }
             selectRegion.Visibility = Visibility.Collapsed;
         }
@@ -392,7 +361,7 @@ namespace Lab5
                 }
             }
         }
-        private void Rectangle_MouseMove_bot(Object sender, MouseEventArgs e)
+        private void Rectangle_MouseMove_bot(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -405,7 +374,7 @@ namespace Lab5
                 e.Handled = true;
             }
         }
-        private void Rectangle_MouseMove_right(Object sender, MouseEventArgs e)
+        private void Rectangle_MouseMove_right(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -418,7 +387,7 @@ namespace Lab5
                 e.Handled = true;
             }
         }
-        private void Rectangle_MouseMove_right_bot(Object sender, MouseEventArgs e)
+        private void Rectangle_MouseMove_right_bot(object sender, MouseEventArgs e)
         {
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -431,7 +400,7 @@ namespace Lab5
                 e.Handled = true;
             }
         }
-        private void Rectangle_MouseLeftButtonUp(Object sender, MouseButtonEventArgs e)
+        private void Rectangle_MouseLeftButtonUp(object sender, MouseButtonEventArgs e)
         {
             (sender as Rectangle).ReleaseMouseCapture();
         }
@@ -544,6 +513,14 @@ namespace Lab5
             {
                 curNode.SetVariables(edit_variables_dlg.Variables);
             }
+        }
+        private void AddClass_Click(object sender, RoutedEventArgs e)
+        {
+            if (curNode != null && curNode.Selected)
+                curNode.InvSelect();
+            curNode = new Node { Pos = mousePress, Text = "Class " + (graph.Nodes.Count() + 1), Width = 100, Height = 100 };
+            graph.Nodes.Add(curNode);
+            curNode.InvSelect();
         }
     }
 }

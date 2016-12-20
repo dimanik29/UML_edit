@@ -390,8 +390,6 @@ namespace Lab5
         }
         public void calcArrow()
         {
-
-            
             //centr
             X3 = (start.X + finish.X) / 2;
             Y3 = (start.Y + finish.Y) / 2;
