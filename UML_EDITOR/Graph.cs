@@ -118,7 +118,7 @@ namespace Lab5
             return this.HeaderName;
         }
     }
-
+    
     [Serializable]
     public class Method
     {
@@ -127,7 +127,7 @@ namespace Lab5
         public string beautiful_access { get { return dict_Method[access]; } set { SetAccess(value); } }
         public string name { get; set; }
         public string variables { get; set; }
-        public Dictionary<string, string> dict_Method = new Dictionary<string, string> { { "+ ", "Public" }, { "- ", "Private" }, { "# ", "Protected" }, { "/ ", "Derived" }, { "~ ", "Package" } };
+        public Dictionary<string, string> dict_Method = new Dictionary<string, string> { { "+ ", "public" }, { "- ", "private" }, { "# ", "protected" }, { "/ ", "derived" }, { "~ ", "package" } };
         public void SetAccess(string str)
         {
             if (!dict_Method.ContainsValue(str))
@@ -148,7 +148,7 @@ namespace Lab5
         public string beautiful_access_var { get { return dict_Variable[access]; } set { SetAccess(value); } }
         public string name { get; set; }
         public string tip { get; set; }
-        public Dictionary<string, string> dict_Variable = new Dictionary<string, string> { { "+ ", "Public" }, { "- ", "Private" }, { "# ", "Protected" }, { "/ ", "Derived" }, { "~ ", "Package" } };
+        public Dictionary<string, string> dict_Variable = new Dictionary<string, string> { { "+ ", "public" }, { "- ", "private" }, { "# ", "protected" }, { "/ ", "perived" }, { "~ ", "package" } };
         public void SetAccess(string str)
         {
             if (!dict_Variable.ContainsValue(str))
@@ -359,10 +359,31 @@ namespace Lab5
             return Text + "\t" + Pos.X + "\t" + Pos.Y;
         }
 
-        public static Node Parse(string nodeAsString)
+        private string parent;
+        public string Parent { get { return String.IsNullOrEmpty(parent)? parent: " : "+parent; }set { parent = value; } }
+        
+        public string Parse()
         {
-            var f = nodeAsString.Split('\t');
-            return new Node { Text = f[0], Pos = new Point(double.Parse(f[1]), double.Parse(f[2])) };
+            StringBuilder sb = new StringBuilder();
+            sb.AppendLine(String.Format("public class {0}{1}", Text, Parent));
+            sb.AppendLine("{");
+            sb.AppendLine("\n// автоматически сгенерированный список переменных");
+            foreach (var item in variables)
+            {
+
+                string t = !(item.access == "+ " || item.access == "# ") ? item.dict_Variable["- "] : item.beautiful_access_var;
+                sb.AppendLine(String.Format("\t{0} {1} {2} ;", t, item.tip, item.name));
+            }
+            sb.AppendLine("\n// автоматически сгенерированный список методов");
+            foreach (var item in metods)
+            {
+                string t = !(item.access == "+ " || item.access == "# ") ? item.dict_Method["- "] : item.beautiful_access;
+                sb.AppendLine(String.Format("\t{0} void {1} ({2}) ", t, item.name, item.variables));
+                sb.AppendLine("\t{ ");
+                sb.AppendLine("\t\t"+@"new NullReferenceException(""null realizatoin"");");
+                sb.AppendLine("\t} ");
+            }
+            return sb.ToString();
         }
     }
     [Serializable]

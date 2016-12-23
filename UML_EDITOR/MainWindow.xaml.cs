@@ -33,7 +33,6 @@ namespace Lab5
         {
             var border = sender as Border;
             var node = border.DataContext as Node;
-
         }
 
         int i;
@@ -133,7 +132,6 @@ namespace Lab5
 
             var border = sender as Border;
             border.ReleaseMouseCapture();
-
         }
         Point selectRegionMousePress;
         private void ItemsControl_MouseDown(object sender, MouseButtonEventArgs e)
@@ -154,8 +152,8 @@ namespace Lab5
                 else
                 {
                     curNode = null;
-                    var g = e.GetPosition(sender as IInputElement);
-                    selectRegionMousePress = g;
+                    //var g = e.GetPosition(sender as IInputElement);
+                    selectRegionMousePress = p;
                     e.Handled = false;
                 }
             }
@@ -164,10 +162,6 @@ namespace Lab5
         {
             if (e.Key == Key.Delete)
             {
-
-                var del_edge = graph.Edges.Where(x => x.Selected).FirstOrDefault();
-                graph.Edges.Remove(del_edge);
-
                 var rem = graph.Nodes.Where(x => x.Selected).ToArray();
                 graph.Nodes.Remove(curNode);
                 for (int i = 0; i < rem.Length; i++) //удаление нескольких узлов
@@ -238,19 +232,7 @@ namespace Lab5
             textBox_nameDiag.SelectAll();
             textBox_nameDiag.Focus();
         }
-        private void ItemsControl_MouseMove(object sender, MouseEventArgs e)
-        {
-
-            if (e.LeftButton == MouseButtonState.Pressed)
-            {
-                var ic = sender as ItemsControl;
-                var grid = (ic.Parent as Grid);
-                var ghost_line = grid.FindName("ghost_line") as Line;
-                var g = e.GetPosition(grid);
-                var pr = g - selectRegionMousePress;
-                
-            }
-        }
+        
         private void ItemsControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
             selectRegion.Visibility = System.Windows.Visibility.Collapsed;
@@ -465,10 +447,6 @@ namespace Lab5
                 }
             }
         }
-        private void tbx_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            selectRegion.Visibility = Visibility.Collapsed;
-        }
         private void AddMethod_Item_Click(object sender, RoutedEventArgs e)
         {
             var dlg = new AddMethodDialog();
@@ -521,6 +499,21 @@ namespace Lab5
             curNode = new Node { Pos = mousePress, Text = "Class " + (graph.Nodes.Count() + 1), Width = 100, Height = 100 };
             graph.Nodes.Add(curNode);
             curNode.InvSelect();
+        }
+
+        private void Button_export_click(object sender, RoutedEventArgs e)
+        {
+            int i = 0;
+            DirectoryInfo di = Directory.CreateDirectory(@"classes\\");
+            foreach (var item in graph.Nodes)
+            {
+                Directory.CreateDirectory(@"classes\\" + graph.HeaderName + "\\");
+                var fs = new StreamWriter(File.Create(@"classes\\" + graph.HeaderName + "\\" + item.Text + i + ".cs"));
+                var t = item.Parse();
+                fs.WriteLine(item.Parse());
+                i++;
+                fs.Close();
+            }
         }
     }
 }

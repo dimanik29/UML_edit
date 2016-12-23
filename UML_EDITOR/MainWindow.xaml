@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Lab5"
         mc:Ignorable="d"
-        KeyDown="Window_KeyDown"
+        KeyDown="Window_KeyDown" WindowStartupLocation="CenterScreen" WindowState="Maximized"
         Title="Simple Uml Class Diagram Editor"  Height="550" Width="950" MouseUp="Window_MouseUp" Icon="icons\MainWindowIcon.png">
     <Window.Resources>
         <ItemsPanelTemplate x:Key="cnv">
@@ -22,6 +22,7 @@
             <Button Content=" New " Height="20" Width="60" Click="Button_newTab"/>
             <Button Content=" Load " Height="20" Width="60" Click="Button_Load"/>
             <Button Content=" Save " Height="20" Width="60" Click="Button_Save"/>
+            <Button Content=" Export " Height="20" Width="60" Click="Button_export_click"/>
             <Grid Height="40" Width="Auto" x:Name="Grid_create" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="textBox_nameDiag" Height="19" Width="80" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="Name"
@@ -38,7 +39,16 @@
                             <RadioButton Margin="2" x:Name="Dependency" Content="Dependency" IsChecked="True"  VerticalAlignment="Center" Checked="Dependency_Checked"/>
                             <RadioButton Margin="2" x:Name="Association" Content="Association" VerticalAlignment="Center" Checked="Association_Checked"/>
                             <RadioButton Margin="2" x:Name="implementation" Content="Implementation" VerticalAlignment="Center" Checked="implementation_Checked"/>
-                            <RadioButton Margin="2" x:Name="Inheritance" Content="Inheritance" VerticalAlignment="Center" Checked="Inheritance_Checked"/>
+                            <RadioButton Margin="2" x:Name="Inheritance" Content="Inheritance" VerticalAlignment="Center" Checked="Inheritance_Checked">
+                                <RadioButton.ToolTip>
+                                    <ToolTip Width="200" Height="150">
+                                        <StackPanel>
+                                            <TextBlock Text="Мои кошки" />
+                                            <!--<Image Source="cats.jpg"/>-->
+                                        </StackPanel>
+                                    </ToolTip>
+                                </RadioButton.ToolTip>
+                            </RadioButton>
                         </StackPanel>
                     </Grid>
                 </StackPanel>
@@ -60,7 +70,6 @@
                     <Grid MouseMove="Grid_MouseMove">
                         <ItemsControl ItemsSource="{Binding Nodes}" ItemsPanel="{StaticResource cnv}"
                                       MouseDown="ItemsControl_MouseDown"
-                                      MouseMove="ItemsControl_MouseMove"
                                       MouseUp="ItemsControl_MouseUp"
                                       Background="#01FFFFFF">
                             <ItemsControl.ContextMenu>
