@@ -163,9 +163,13 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="icons\association.png" />
     <Resource Include="icons\close.png" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="icons\depend.png" />
+    <Resource Include="icons\implement.png" />
+    <Resource Include="icons\inherit.png" />
     <Resource Include="icons\interface.png" />
   </ItemGroup>
   <ItemGroup>

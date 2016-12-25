@@ -370,7 +370,6 @@ namespace Lab5
             sb.AppendLine("\n// автоматически сгенерированный список переменных");
             foreach (var item in variables)
             {
-
                 string t = !(item.access == "+ " || item.access == "# ") ? item.dict_Variable["- "] : item.beautiful_access_var;
                 sb.AppendLine(String.Format("\t{0} {1} {2} ;", t, item.tip, item.name));
             }

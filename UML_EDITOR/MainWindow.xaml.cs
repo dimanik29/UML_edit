@@ -65,7 +65,6 @@ namespace Lab5
             if (e.RightButton == MouseButtonState.Pressed)
             {
                 curNode = (sender as Border).DataContext as Node;
-
             }
             if (e.LeftButton == MouseButtonState.Pressed)
             {
@@ -142,7 +141,6 @@ namespace Lab5
             {
                 if (Keyboard.Modifiers == ModifierKeys.Shift)
                 {
-                    
                     if (curNode != null && curNode.Selected)
                         curNode.InvSelect();
                     curNode = new Node { Pos = p, Text = "Class " + (graph.Nodes.Count() + 1), Width = 100, Height = 100 };
@@ -151,8 +149,8 @@ namespace Lab5
                 }
                 else
                 {
-                    curNode = null;
                     //var g = e.GetPosition(sender as IInputElement);
+                    curNode = null;
                     selectRegionMousePress = p;
                     e.Handled = false;
                 }
@@ -232,7 +230,7 @@ namespace Lab5
             textBox_nameDiag.SelectAll();
             textBox_nameDiag.Focus();
         }
-        
+
         private void ItemsControl_MouseUp(object sender, MouseButtonEventArgs e)
         {
             selectRegion.Visibility = System.Windows.Visibility.Collapsed;
@@ -443,7 +441,6 @@ namespace Lab5
                         }
                     }
                     selectRegion.Visibility = System.Windows.Visibility.Visible;
-                    
                 }
             }
         }
@@ -500,7 +497,6 @@ namespace Lab5
             graph.Nodes.Add(curNode);
             curNode.InvSelect();
         }
-
         private void Button_export_click(object sender, RoutedEventArgs e)
         {
             int i = 0;
@@ -509,11 +505,11 @@ namespace Lab5
             {
                 Directory.CreateDirectory(@"classes\\" + graph.HeaderName + "\\");
                 var fs = new StreamWriter(File.Create(@"classes\\" + graph.HeaderName + "\\" + item.Text + i + ".cs"));
-                var t = item.Parse();
                 fs.WriteLine(item.Parse());
                 i++;
                 fs.Close();
             }
+            MessageBox.Show("Files succesfully created!", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

@@ -17,12 +17,35 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Margin="6,0,0,0">
-            <Button Content=" New " Height="20" Width="60" Click="Button_newTab"/>
-            <Button Content=" Load " Height="20" Width="60" Click="Button_Load"/>
-            <Button Content=" Save " Height="20" Width="60" Click="Button_Save"/>
-            <Button Content=" Export " Height="20" Width="60" Click="Button_export_click"/>
+            <Button Content=" New " Height="20" Width="60" Click="Button_newTab">
+                <Button.ToolTip>
+                    <ToolTip>
+                        <TextBlock Text="Create new diagram"/>
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+            <Button Content=" Load " Height="20" Width="60" Click="Button_Load">
+                <Button.ToolTip>
+                    <ToolTip>
+                        <TextBlock Text="Load diagram"/>
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+            <Button Content=" Save " Height="20" Width="60" Click="Button_Save">
+                <Button.ToolTip>
+                    <ToolTip>
+                        <TextBlock Text="Save current diagram"/>
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
+            <Button Content=" Export " Height="20" Width="60" Click="Button_export_click">
+                <Button.ToolTip>
+                    <ToolTip>
+                        <TextBlock Text="Exports a .cs file with classes"/>
+                    </ToolTip>
+                </Button.ToolTip>
+            </Button>
             <Grid Height="40" Width="Auto" x:Name="Grid_create" Visibility="Collapsed">
                 <StackPanel Orientation="Horizontal">
                     <TextBox x:Name="textBox_nameDiag" Height="19" Width="80" TextAlignment="Center" VerticalAlignment="Center" TextWrapping="Wrap" Text="Name"
@@ -36,14 +59,45 @@
                     <TextBlock Text="Type of Line" Margin="2"/>
                     <Grid>
                         <StackPanel Orientation="Horizontal" Width="Auto">
-                            <RadioButton Margin="2" x:Name="Dependency" Content="Dependency" IsChecked="True"  VerticalAlignment="Center" Checked="Dependency_Checked"/>
-                            <RadioButton Margin="2" x:Name="Association" Content="Association" VerticalAlignment="Center" Checked="Association_Checked"/>
-                            <RadioButton Margin="2" x:Name="implementation" Content="Implementation" VerticalAlignment="Center" Checked="implementation_Checked"/>
-                            <RadioButton Margin="2" x:Name="Inheritance" Content="Inheritance" VerticalAlignment="Center" Checked="Inheritance_Checked">
+                            <RadioButton Margin="2,2,20,2" x:Name="Dependency" IsChecked="True"  VerticalAlignment="Center" Checked="Dependency_Checked">
+                                <Image Source="icons\depend.png" Height="15"/>
                                 <RadioButton.ToolTip>
-                                    <ToolTip Width="200" Height="150">
+                                    <ToolTip Width="Auto" Height="Auto">
                                         <StackPanel>
-                                            <TextBlock Text="Мои кошки" />
+                                            <TextBlock Text="Dependency" />
+                                            <!--<Image Source="cats.jpg"/>-->
+                                        </StackPanel>
+                                    </ToolTip>
+                                </RadioButton.ToolTip>
+                            </RadioButton>
+                            <RadioButton Margin="2,2,20,2" x:Name="Association" VerticalAlignment="Center" Checked="Association_Checked">
+                                <Image Source="icons\association.png" Height="15"/>
+                                <RadioButton.ToolTip>
+                                    <ToolTip Width="Auto" Height="Auto">
+                                        <StackPanel>
+                                            <TextBlock Text="Association" />
+                                            <!--<Image Source="cats.jpg"/>-->
+                                        </StackPanel>
+                                    </ToolTip>
+                                </RadioButton.ToolTip>
+                            </RadioButton>
+                            <RadioButton Margin="2,2,20,2" x:Name="implementation" VerticalAlignment="Center" Checked="implementation_Checked">
+                                <Image Source="icons\implement.png" Height="15"/>
+                                <RadioButton.ToolTip>
+                                    <ToolTip Width="Auto" Height="Auto">
+                                        <StackPanel>
+                                            <TextBlock Text="Implementation" />
+                                            <!--<Image Source="cats.jpg"/>-->
+                                        </StackPanel>
+                                    </ToolTip>
+                                </RadioButton.ToolTip>
+                            </RadioButton>
+                            <RadioButton Margin="2,2,20,2" x:Name="Inheritance" VerticalAlignment="Center" Checked="Inheritance_Checked">
+                                <Image Source="icons\inherit.png" Height="15"/>
+                                <RadioButton.ToolTip>
+                                    <ToolTip Width="Auto" Height="Auto">
+                                        <StackPanel>
+                                            <TextBlock Text="Inheritance" />
                                             <!--<Image Source="cats.jpg"/>-->
                                         </StackPanel>
                                     </ToolTip>
