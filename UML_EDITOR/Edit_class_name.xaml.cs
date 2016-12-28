@@ -32,9 +32,18 @@ namespace Lab5
         }
         public void SetNode(Node n)
         {
+            try
+            {
             Title = n.Text;
             TXT_DIALOG.Text = n.Text;
             stereotype_comboBox.SelectedIndex = n.stereotype_index;
+            }
+            catch (System.NullReferenceException)
+            {
+                Title = "AddClass";
+                TXT_DIALOG.Text = "classname";
+                stereotype_comboBox.SelectedIndex = 0;
+            }
         }
     }
 }

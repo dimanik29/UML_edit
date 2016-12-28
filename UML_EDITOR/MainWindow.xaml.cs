@@ -9,6 +9,7 @@ using System.Windows.Shapes;
 
 namespace Lab5
 {
+
     public partial class MainWindow : Window
     {
         ObservableCollection<Graph> graphs = new ObservableCollection<Graph>();
@@ -62,16 +63,18 @@ namespace Lab5
         double mousePath;
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
+
             if (e.RightButton == MouseButtonState.Pressed)
             {
                 curNode = (sender as Border).DataContext as Node;
+                curNode.naMed = graph.HeaderName;
             }
             if (e.LeftButton == MouseButtonState.Pressed)
             {
                 var border = sender as Border;
                 var grid = (border.Parent as Grid);
                 var grid_par = grid.Parent as ItemsControl;
-                
+
                 mousePress = e.GetPosition(this);
                 mousePath = 0;
 
@@ -107,7 +110,9 @@ namespace Lab5
                 {
                     selectRegion.Visibility = System.Windows.Visibility.Collapsed;
                     curNode = border.DataContext as Node;
+                   
                 }
+            curNode.naMed = graph.HeaderName;
             e.Handled = true;
             }
         }
@@ -143,13 +148,12 @@ namespace Lab5
                 {
                     if (curNode != null && curNode.Selected)
                         curNode.InvSelect();
-                    curNode = new Node { Pos = p, Text = "Class " + (graph.Nodes.Count() + 1), Width = 100, Height = 100 };
+                    curNode = new Node { Pos = p, Text = "Class " + (graph.Nodes.Count() + 1), Width = 100, Height = 100, naMed = graph.HeaderName};
                     graph.Nodes.Add(curNode);
                     curNode.InvSelect();
                 }
                 else
                 {
-                    //var g = e.GetPosition(sender as IInputElement);
                     curNode = null;
                     selectRegionMousePress = p;
                     e.Handled = false;
@@ -250,7 +254,6 @@ namespace Lab5
                 {
                     t.InvDirection();
                 }
-                
             }
             selectRegion.Visibility = Visibility.Collapsed;
         }
@@ -491,25 +494,46 @@ namespace Lab5
         }
         private void AddClass_Click(object sender, RoutedEventArgs e)
         {
-            if (curNode != null && curNode.Selected)
-                curNode.InvSelect();
-            curNode = new Node { Pos = mousePress, Text = "Class " + (graph.Nodes.Count() + 1), Width = 100, Height = 100 };
-            graph.Nodes.Add(curNode);
-            curNode.InvSelect();
+            var ed_class_dlg = new Edit_class_name();
+            ed_class_dlg.SetNode(curNode);
+            if (ed_class_dlg.ShowDialog() == true)
+            {
+                var p = graph.Nodes.Where(x => x.Text == ed_class_dlg.name).Count();
+                if (p>0)
+                {
+                    MessageBox.Show("Class with that name has already created.\nTry another name!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                else
+                {
+                    if (curNode != null && curNode.Selected)
+                        curNode.InvSelect();
+                    curNode = new Node { Pos = mousePress, Text = "Class " + (graph.Nodes.Count() + 1), Width = 100, Height = 100 };
+                    graph.Nodes.Add(curNode);
+                    curNode.InvSelect();
+                    curNode.naMed = graph.HeaderName;
+
+                    curNode.Text = ed_class_dlg.name;
+                    curNode.stereotype_index = ed_class_dlg.ster;
+                    curNode.StereotypeVis();
+                }
+            }
         }
         private void Button_export_click(object sender, RoutedEventArgs e)
         {
-            int i = 0;
-            DirectoryInfo di = Directory.CreateDirectory(@"classes\\");
-            foreach (var item in graph.Nodes)
+            System.Windows.Forms.FolderBrowserDialog dlg = new System.Windows.Forms.FolderBrowserDialog() {Description = "Choose directory for save" };
+            System.Windows.Forms.DialogResult res = dlg.ShowDialog();
+            var path = dlg.SelectedPath;
+            
+            if(res == System.Windows.Forms.DialogResult.OK)
             {
-                Directory.CreateDirectory(@"classes\\" + graph.HeaderName + "\\");
-                var fs = new StreamWriter(File.Create(@"classes\\" + graph.HeaderName + "\\" + item.Text + i + ".cs"));
-                fs.WriteLine(item.Parse());
-                i++;
-                fs.Close();
+                foreach (var item in graph.Nodes)
+                {
+                    var fs = new StreamWriter(File.Create(path + "\\" + item.Text + ".cs"));
+                    fs.WriteLine(item.Parse());
+                    fs.Close();
+                }
+                MessageBox.Show("Files succesfully created!", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
             }
-            MessageBox.Show("Files succesfully created!", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
     }
 }

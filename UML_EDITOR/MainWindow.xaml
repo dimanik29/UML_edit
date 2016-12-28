@@ -60,7 +60,14 @@
                     <Grid>
                         <StackPanel Orientation="Horizontal" Width="Auto">
                             <RadioButton Margin="2,2,20,2" x:Name="Dependency" IsChecked="True"  VerticalAlignment="Center" Checked="Dependency_Checked">
-                                <Image Source="icons\depend.png" Height="15"/>
+                                <StackPanel>
+                                    <Grid Width="40" Height="40">
+                                        <Line X1="40" Y1="0" X2="0" Y2="40" Stroke="Black" StrokeThickness="2" StrokeDashArray="3 1" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                        <Line X1="39" Y1="2" X2="36" Y2="20" Stroke="Black" StrokeThickness="2" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                        <Line X1="39" Y1="1" X2="20" Y2="3" Stroke="Black" StrokeThickness="2" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                    </Grid>
+                                    <!--<Image Source="icons\depend.png" Height="15"/>-->
+                                </StackPanel>
                                 <RadioButton.ToolTip>
                                     <ToolTip Width="Auto" Height="Auto">
                                         <StackPanel>
@@ -71,7 +78,14 @@
                                 </RadioButton.ToolTip>
                             </RadioButton>
                             <RadioButton Margin="2,2,20,2" x:Name="Association" VerticalAlignment="Center" Checked="Association_Checked">
-                                <Image Source="icons\association.png" Height="15"/>
+                                <StackPanel>
+                                    <Grid Width="40" Height="40">
+                                        <Line X1="40" Y1="0" X2="0" Y2="40" Stroke="Black" StrokeThickness="2" StrokeDashArray="1 0" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                        <Line X1="39" Y1="2" X2="36" Y2="20" Stroke="Black" StrokeThickness="2" StrokeEndLineCap="Round" StrokeStartLineCap="Round" />
+                                        <Line X1="39" Y1="1" X2="20" Y2="3" Stroke="Black" StrokeThickness="2" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                    </Grid>
+                                    <!--<Image Source="icons\association.png" Height="15"/>-->
+                                </StackPanel>
                                 <RadioButton.ToolTip>
                                     <ToolTip Width="Auto" Height="Auto">
                                         <StackPanel>
@@ -82,7 +96,15 @@
                                 </RadioButton.ToolTip>
                             </RadioButton>
                             <RadioButton Margin="2,2,20,2" x:Name="implementation" VerticalAlignment="Center" Checked="implementation_Checked">
-                                <Image Source="icons\implement.png" Height="15"/>
+                                <StackPanel>
+                                    <Grid Width="40" Height="40">
+                                        <Line X1="40" Y1="0" X2="0" Y2="40" Stroke="Black" StrokeThickness="2" StrokeDashArray="3 1" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                        <Line X1="39" Y1="2" X2="32" Y2="16" Stroke="Black" StrokeThickness="2" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                        <Line X1="39" Y1="1" X2="23" Y2="7" Stroke="Black" StrokeThickness="2"  StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                        <Line X1="32" Y1="16" X2="23" Y2="7" Stroke="Black" StrokeThickness="2" StrokeEndLineCap="Round" StrokeStartLineCap="Round" />
+                                    </Grid>
+                                    <!--<Image Source="icons\implement.png" Height="15"/>-->
+                                </StackPanel>
                                 <RadioButton.ToolTip>
                                     <ToolTip Width="Auto" Height="Auto">
                                         <StackPanel>
@@ -93,7 +115,15 @@
                                 </RadioButton.ToolTip>
                             </RadioButton>
                             <RadioButton Margin="2,2,20,2" x:Name="Inheritance" VerticalAlignment="Center" Checked="Inheritance_Checked">
-                                <Image Source="icons\inherit.png" Height="15"/>
+                                <StackPanel>
+                                    <Grid Width="40" Height="40">
+                                        <Line X1="40" Y1="0" X2="0" Y2="40" Stroke="Black" StrokeThickness="2" StrokeDashArray="3 0" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                        <Line X1="39" Y1="2" X2="32" Y2="16" Stroke="Black" StrokeThickness="2" StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                        <Line X1="39" Y1="1" X2="23" Y2="7" Stroke="Black" StrokeThickness="2"  StrokeEndLineCap="Round" StrokeStartLineCap="Round"/>
+                                        <Line X1="32" Y1="16" X2="23" Y2="7" Stroke="Black" StrokeThickness="2" StrokeEndLineCap="Round" StrokeStartLineCap="Round" />
+                                    </Grid>
+                                    <!--<Image Source="icons\inherit.png" Height="15"/>-->
+                                </StackPanel>
                                 <RadioButton.ToolTip>
                                     <ToolTip Width="Auto" Height="Auto">
                                         <StackPanel>

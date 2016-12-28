@@ -63,7 +63,6 @@ namespace Lab5
         }
     }
 
-
     [Serializable]
     class Graph : ViewModelBase
     {
@@ -181,12 +180,12 @@ namespace Lab5
         public void SetMethods(List<Method> lm)
         {
             metods = lm;
-            Fire(nameof(Metods));
+            Fire("Metods");
         }
         public void SetVariables(List<Variable> lv)
         {
             variables = lv;
-            Fire(nameof(Variables));
+            Fire("Variables");
         }
         /// <summary>
         /// Начало кластера изменения переменных
@@ -195,7 +194,7 @@ namespace Lab5
         public void AddVariable(Variable f)
         {
             variables.Add(f);
-            Fire(nameof(Variables));
+            Fire("Variables");
         }
         public List<Variable> variables;
         private string variables_str()
@@ -218,7 +217,7 @@ namespace Lab5
         public void AddMethod(Method f)
         {
             metods.Add(f);
-            Fire(nameof(Metods));
+            Fire("Metods");
         }
         public List<Method> metods;
         private string metods_str()
@@ -270,10 +269,10 @@ namespace Lab5
             {
                 _vis_stereotype[f] = Visibility.Visible;
             }
-            Fire(nameof(VisMode_stereotype_boundary));
-            Fire(nameof(VisMode_stereotype_control));
-            Fire(nameof(VisMode_stereotype_entity));
-            Fire(nameof(VisMode_stereotype_interface));
+            Fire("VisMode_stereotype_boundary");
+            Fire("VisMode_stereotype_control");
+            Fire("VisMode_stereotype_entity");
+            Fire("VisMode_stereotype_interface");
         }
         public void StereotypeVis()
         {
@@ -313,9 +312,9 @@ namespace Lab5
         {
             Fire("Right");
             Fire("Bot");
-            Fire(nameof(Right_Bot));
-            Fire(nameof(Center));
-            Fire(nameof(Top_Centr));
+            Fire("Right_Bot");
+            Fire("Center");
+            Fire("Top_Centr");
             foreach (var item in linqs)
             {
                 item.calcReplace();
@@ -362,29 +361,48 @@ namespace Lab5
         private string parent;
         public string Parent { get { return String.IsNullOrEmpty(parent)? parent: " : "+parent; }set { parent = value; } }
         
+        public string naMed;
         public string Parse()
         {
+            var parseNamed = naMed;
+            var replaced_text = Text;
+
+            try
+            {
+                parseNamed = naMed.Replace(" ", "");
+                replaced_text = Text.Replace(" ", "");
+            }
+            catch (System.NullReferenceException)
+            {
+                parseNamed = naMed;
+                replaced_text = Text;
+            }
             StringBuilder sb = new StringBuilder();
-            sb.AppendLine(String.Format("public class {0}{1}", Text, Parent));
+            sb.AppendLine(String.Format("namespace {0}", parseNamed));
             sb.AppendLine("{");
+            sb.AppendLine(String.Format("\tpublic class {0}{1}", replaced_text, Parent));
+            sb.AppendLine("\t{");
             sb.AppendLine("\n// автоматически сгенерированный список переменных");
             foreach (var item in variables)
             {
                 string t = !(item.access == "+ " || item.access == "# ") ? item.dict_Variable["- "] : item.beautiful_access_var;
-                sb.AppendLine(String.Format("\t{0} {1} {2} ;", t, item.tip, item.name));
+                sb.AppendLine(String.Format("\t\t{0} {1} {2} ;", t, item.tip, item.name));
             }
             sb.AppendLine("\n// автоматически сгенерированный список методов");
             foreach (var item in metods)
             {
                 string t = !(item.access == "+ " || item.access == "# ") ? item.dict_Method["- "] : item.beautiful_access;
-                sb.AppendLine(String.Format("\t{0} void {1} ({2}) ", t, item.name, item.variables));
-                sb.AppendLine("\t{ ");
-                sb.AppendLine("\t\t"+@"new NullReferenceException(""null realizatoin"");");
-                sb.AppendLine("\t} ");
+                sb.AppendLine(String.Format("\t\t{0} void {1} ({2}) ", t, item.name, item.variables));
+                sb.AppendLine("\t\t{ ");
+                sb.AppendLine("\t\t\t"+@"new NullReferenceException(""null realizatoin"");");
+                sb.AppendLine("\t\t} ");
             }
+            sb.AppendLine("\t}");
+            sb.AppendLine("}");
             return sb.ToString();
         }
     }
+
     [Serializable]
     public class Edge : ViewModelBase
     {
@@ -434,12 +452,12 @@ namespace Lab5
             Y5 = Y4 + (Yp / d) * 7;
             X6 = X4 - (Xp / d) * 7;
             Y6 = Y4 - (Yp / d) * 7;
-            Fire(nameof(X3));
-            Fire(nameof(X5));
-            Fire(nameof(X6));
-            Fire(nameof(Y3));
-            Fire(nameof(Y5));
-            Fire(nameof(Y6));
+            Fire("X3");
+            Fire("X5");
+            Fire("X6");
+            Fire("Y3");
+            Fire("Y5");
+            Fire("Y6");
         }
         public void calcReplace()
         {
@@ -468,8 +486,8 @@ namespace Lab5
                 finish = start;
                 start = e;
             }
-            Fire(nameof(start));
-            Fire(nameof(finish));
+            Fire("start");
+            Fire("finish");
         }
         public void SetNode(Node from, Node to)
         {
